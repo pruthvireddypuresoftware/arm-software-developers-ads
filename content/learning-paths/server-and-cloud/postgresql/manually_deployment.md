@@ -1,6 +1,6 @@
 ---
 # User change
-title: "Deploy a 3-node PostgreSQL cluster with two hot standby servers that are read-only"
+title: "Deploy a 3-node PostgreSQL cluster with two hot standby servers"
 
 weight: 2 # 1 is first, 2 is second, etc.
 
