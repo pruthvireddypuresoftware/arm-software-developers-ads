@@ -1,6 +1,6 @@
 ---
 # User change
-title: "Deploy a single instance of PostgreSQL."
+title: "Deploy a single instance of PostgreSQL"
 
 weight: 2 # 1 is first, 2 is second, etc.
 
