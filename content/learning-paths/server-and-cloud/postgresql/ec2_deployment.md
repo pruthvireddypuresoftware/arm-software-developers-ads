@@ -340,11 +340,10 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
 CREATE TABLE IF NOT EXISTS test (
   message varchar(255) NOT NULL
 );
-  INSERT INTO test(message) VALUES('Ansible is fun');
+INSERT INTO test(message) VALUES('Ansible is fun');
 ALTER TABLE test OWNER TO "admin";
-CREATE TABLE IF NOT EXISTS teachers (
-        id INT PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, subject VARCHAR, grade_level int);
-        INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
+CREATE TABLE IF NOT EXISTS teachers (id INT PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, subject VARCHAR, grade_level int);
+INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
 ```
 
 
