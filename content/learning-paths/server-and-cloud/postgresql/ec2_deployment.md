@@ -333,8 +333,10 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** We have used the dump.sql file to create a table and insert values into the database.
-In our case, the inventory file will generate automatically after the `terraform apply` command.
+**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you will add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the dump.sql file to create a table and insert values into the database.
+
+![image](https://user-images.githubusercontent.com/92078754/216241721-7eff2716-40f6-443a-b955-0e1a930fc8e9.png)
+
 
 ### Ansible Commands
 To run a Playbook, we need to use the `ansible-playbook` command.
