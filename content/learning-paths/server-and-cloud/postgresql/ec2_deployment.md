@@ -176,13 +176,13 @@ egress {
 output "Master_public_IP" {
   value = [aws_instance.PSQL_TEST.public_ip]
 }
-# Generate inventory file
+// Generate inventory file
 resource "local_file" "inventory" {
     depends_on= [aws_instance.PSQL_TEST]
-    filename = "/home/ubuntu/abhay/demo/hosts"
+    filename = "/home/ubuntu/xxx/demo/hosts"
     content = <<EOF
           [db_master]
-          ${aws_instance.abhay-PSQL_TEST.public_ip}         
+          ${aws_instance.PSQL_TEST.public_ip}         
           [all:vars]
           ansible_connection=ssh
           ansible_user=ubuntu
@@ -323,7 +323,7 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       notify: restart postgres
     - name: Copy database dump file
       copy:
-       src: /home/ubuntu/abhay/demo/dump.sql
+       src: /home/ubuntu/xxx/demo/dump.sql
        dest: /tmp
     - name: "Add some dummy data to our database"
       become: true
@@ -354,8 +354,7 @@ ansible-playbook {your_yml_file} -i hosts
 ```
 **NOTE:-** Replace `{your_yml_file}` with your values.
 
-![image](https://user-images.githubusercontent.com/92078754/216256542-fa152a18-1a30-4452-86d7-0a1466538962.png)
-
+![image](https://user-images.githubusercontent.com/92078754/216302251-0b148a11-ed09-4527-ab68-e1ed3592873a.png)
 
 Here is the output after the successful execution of the `ansible-playbook` command.
 
