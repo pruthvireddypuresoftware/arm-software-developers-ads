@@ -238,17 +238,17 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![terraformaapl](https://user-images.githubusercontent.com/92078754/215390110-2514da83-ac67-4a28-99ed-020d68b6c71c.jpg)
+![image](https://user-images.githubusercontent.com/92078754/216297130-7d79fc3a-4768-4f3b-800f-dd592945f587.png)
 
 ## For configuration of master-slave setup manually, follow the below steps on all the nodes
 
 Here are the three nodes deployed by Terraform.
 
-**Primary node:** IP: 3.131.162.244
+**Primary node:** IP: 18.118.187.246
 
-**Replica node:** IP: 52.15.37.65 (hot standby server that are read-only)
+**Replica node:** IP: 3.16.180.53 (hot standby server that are read-only)
 
-**Replica1 node:** IP: 3.17.146.121 (hot standby server that are read-only)
+**Replica1 node:** IP: 3.129.245.237 (hot standby server that are read-only)
 
 ### Install PostgreSQL Server
 
@@ -331,7 +331,7 @@ sudo rm -rf /var/lib/postgresql/9.6/main/*
 
 Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node.
 
-![image](https://user-images.githubusercontent.com/92078754/215405568-b7820bf2-92d1-4565-a305-d395455cf72f.png)
+![image](https://user-images.githubusercontent.com/92078754/216296228-f63fb816-5b54-43c8-afb3-7abea77ea4f3.png)
 
 Now we shall modify **sudo vim /etc/postgresql/9.6/main/pg_hba.conf** changed here hot_standby=off to hot_standby=on.
 
@@ -342,9 +342,14 @@ Last we need to create a recovery.conf file on our data directory. Else replicat
 ```console
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 ```
-![image](https://user-images.githubusercontent.com/92078754/215959419-edc5e377-e146-49a1-b79c-f1e1034aaf6a.png)
+```console
+standby_mode = 'on'
+primary_conninfo = 'host=18.118.187.246 port=5432 user=replication password=password'
+trigger_file = '/var/lib/postgresql/9.6/trigger'
+restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
+```
 
-**NOTE:** In primary conf info you can replace host={with your public_ip}, user={with your rplication_name} and password={with you role_password}.
+**NOTE:** In primary conf info you can replace host={with your public_ip}, user={with your rplication_name} and password={with your replication role_password}.
 
 Here we are telling that stand_by mode is on then we will save our connection info with the host address and replication user and password.
 
@@ -362,7 +367,7 @@ sudo systemctl start postgresql
 
 sudo systemctl stop PostgreSQL
 sudo rm -rv /var/lib/postgresql/9.6/main/*
-pg_basebackup -h 3.131.162.244 -D /var/lib/postgresql/9.6/main/ -P -U replication 
+pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U replication 
 sudo vim /etc/postgresql/9.6/main/pg_hba.conf ## hot_standby=on
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 sudo systemctl start PostgreSQL
