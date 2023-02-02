@@ -20,13 +20,13 @@ layout: "learningpathall"
 
 ## Generate Access keys (access key ID and secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via the AWS CLI.
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
 ### Go to My Security Credentials
 
 ![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
 
-### On Your Security Credentials page click on create access keys (access key ID and secret access key)
+### On Your Security Credentials page, click on create access keys (access key ID and secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
@@ -34,26 +34,26 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
-## Generate key-pair(public key, private key) using ssh keygen
+## Generate key-pair, (public key, private key) using ssh keygen
 
 ### Generate the public key and private key
 
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
-Generate the key-pair using the following command:
+Generate key-pair using the following command:
 
 ```console
 ssh-keygen -t rsa -b 2048
 ```
 
-By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
+By default, the above command, generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
 
 Output when a key pair is generated:
 
 ![image](https://user-images.githubusercontent.com/92078754/215745442-7d9c0295-1cb0-48d1-bc72-4c30cbff276c.png)
 
 
-**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and the private key id_rsa to connect to the instance. Add the below code in the main.tf file, we do not need to generate a public key every time we run terraform apply.
+**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and the private key id_rsa to connect with the instance. Add the below code in the main.tf file and it is not required to generate a public key each time we run `terraform apply`.
 
 ```console
 // ssh-key gen
@@ -85,7 +85,7 @@ resource "local_file" "private_key" {
 
 ## Deploy EC2 instance via Terraform
 
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` which will do this for us.
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` performs the above process.
 
 
 ```console
@@ -215,7 +215,7 @@ terraform plan
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215394355-e4715e1f-95d9-4446-acdb-ab7116b1f34a.png)
 
-**NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check the resources about to be created.
+**NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check the created resources.
 
 #### Apply a Terraform execution plan
 
@@ -231,7 +231,7 @@ terraform apply
 ## Configure PostgreSQL through Ansible
 Ansible is a software tool that provides simple but powerful automation for cross-platform computer support.
 Ansible allows you to configure not just one computer, but potentially a whole network of computers at once.
-To run Ansible, we have to create a `.yml` file, which is also known as `Ansible-Playbook`. The playbook contains a collection of tasks.
+To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. The playbook contains a collection of tasks.
 
 ### Here is the complete YML file of Ansible-Playbook
 ```console
@@ -323,7 +323,7 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       notify: restart postgres
     - name: Copy database dump file
       copy:
-       src: /home/ubuntu/xxx/demo/dump.sql
+       src: /home/ubuntu/Axxx/demo/dump.sql
        dest: /tmp
     - name: "Add some dummy data to our database"
       become: true
@@ -334,7 +334,7 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the `dump.sql` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. We have used `dump.sql` file to create a table and insert values into the database.
 
 ```console
 CREATE TABLE IF NOT EXISTS test (
@@ -352,11 +352,11 @@ To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
 ```
-**NOTE:-** Replace `{your_yml_file}` with your values.
+**NOTE:-** Replace `{{ your_yml_file }}` with your values.
 
 ![image](https://user-images.githubusercontent.com/92078754/216302251-0b148a11-ed09-4527-ab68-e1ed3592873a.png)
 
-Here is the output after the successful execution of the `ansible-playbook` command.
+Here is the output after successful execution of the `ansible-playbook` command.
 
 ![image](https://user-images.githubusercontent.com/92078754/216256702-5fbab32c-2286-4ffa-9ff3-7d8fc9e54d9f.png)
 
@@ -368,13 +368,13 @@ To connect to the database, we need the `public-ip` of the instance where Postgr
 ```console
 ssh ubuntu@3.133.100.152
 ```
-**NOTE:-** Replace `{public_ip of an instance where Postgresql deployed}` which we have created through the `.yml` file.  
+**NOTE:-** Replace `{{ public_ip of an instance where Postgresql deployed }}` which we have created through the `.yml` file.  
 ```console
 sudo su postgres psql
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215392554-9b99d2bb-8598-4af0-a2c8-47e44fddef95.png)
 
-We can use the below commands to show our databases and tables.
+We can use the below command to show our databases and tables.
 
 ```console
 postgres# \l;
@@ -387,7 +387,7 @@ postgres=# \c testdb;
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215393022-56f6f41a-a115-41a5-b108-beccc8374fde.png)
 
-Use the below commands to show the tables.
+Use the below command to show the tables.
 
 ```console
 testdb=# \dt;
