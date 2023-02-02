@@ -251,7 +251,7 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       shell: wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
     - name: install postgres
       shell: sudo apt-get install postgresql -y
-    - name: start potgres server
+    - name: start postgres server
       shell: sudo systemctl start postgresql
     - name: check the status
       shell: sudo systemctl status postgresql
@@ -333,7 +333,7 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you will add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the dump.sql file to create a table and insert values into the database.
+**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the dump.sql file to create a table and insert values into the database.
 
 ![image](https://user-images.githubusercontent.com/92078754/216241721-7eff2716-40f6-443a-b955-0e1a930fc8e9.png)
 
