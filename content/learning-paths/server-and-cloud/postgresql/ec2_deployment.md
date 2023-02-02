@@ -54,7 +54,8 @@ Output when a key pair is generated:
 
 
 **Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and the private key id_rsa to connect to the instance. Add the below code in the main.tf file, we do not need to generate a public key every time we run terraform apply.
-```
+
+```console
 // ssh-key gen
 resource "tls_private_key" task1_p_key  {
     algorithm = "RSA"
@@ -87,7 +88,7 @@ resource "local_file" "private_key" {
 After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` which will do this for us.
 
 
-```
+```console
 
 // ssh-key gen
 resource "tls_private_key" task1_p_key  {
@@ -180,12 +181,12 @@ resource "local_file" "inventory" {
     depends_on= [aws_instance.PSQL_TEST]
     filename = "/home/ubuntu/abhay/demo/hosts"
     content = <<EOF
-                [db_master]
-                ${aws_instance.abhay-PSQL_TEST.public_ip}         
-                [all:vars]
-                ansible_connection=ssh
-                ansible_user=ubuntu
-                EOF
+          [db_master]
+          ${aws_instance.abhay-PSQL_TEST.public_ip}         
+          [all:vars]
+          ansible_connection=ssh
+          ansible_user=ubuntu
+          EOF
 }
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
@@ -333,21 +334,34 @@ To run Ansible, we have to create a `.yml` file, which is also known as `Ansible
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the dump.sql file to create a table and insert values into the database.
+**NOTE:** Replace {{db_name}} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file will generate automatically after the terraform apply command. We have used the `dump.sql` file to create a table and insert values into the database.
 
-![image](https://user-images.githubusercontent.com/92078754/216241721-7eff2716-40f6-443a-b955-0e1a930fc8e9.png)
+```console
+CREATE TABLE IF NOT EXISTS test (
+  message varchar(255) NOT NULL
+);
+  INSERT INTO test(message) VALUES('Ansible is fun');
+ALTER TABLE test OWNER TO "admin";
+CREATE TABLE IF NOT EXISTS teachers (
+        id INT PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, subject VARCHAR, grade_level int);
+        INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
+```
 
 
 ### Ansible Commands
 To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
-ansible-playbook {your_yml_file} -i {your_inventory_file} --key-file {path_to_private_key}
+ansible-playbook {your_yml_file} -i hosts
 ```
-**NOTE:-** Replace `{your_yml_file}`, `{your_inventory_file}` and `{path_to_private_key}` with your values.
+**NOTE:-** Replace `{your_yml_file}` with your values.
+
+![image](https://user-images.githubusercontent.com/92078754/216256542-fa152a18-1a30-4452-86d7-0a1466538962.png)
+
 
 Here is the output after the successful execution of the `ansible-playbook` command.
 
-![singlenode](https://user-images.githubusercontent.com/92078754/215390479-9f860d28-a4f7-4195-988f-210deefcac80.jpg)
+![image](https://user-images.githubusercontent.com/92078754/216256702-5fbab32c-2286-4ffa-9ff3-7d8fc9e54d9f.png)
+
 
 ## Connect to Database using EC2 instance
 
