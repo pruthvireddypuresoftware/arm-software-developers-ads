@@ -54,7 +54,7 @@ Output when a key pair is generated:
 
 **Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and private key id_rsa to connect to the instance. Add the below code in main.tf file, we do not need to generate public key every time we run terrform apply.
 
-```
+```console
 // ssh-key gen
 resource "tls_private_key" task1_p_key  {
     algorithm = "RSA"
@@ -90,7 +90,7 @@ After generating the public and private keys, we have to create an EC2 instance.
 
 
 
-```
+```console
 // ssh-key gen
 resource "tls_private_key" task1_p_key  {
     algorithm = "RSA"
@@ -250,13 +250,13 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.17.146.121
 
-## Install PostgreSQL Server
+### Install PostgreSQL Server
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. Note that you need to install the same version of PostgreSQL on all 3 nodes for logical replication.
 
 First, log in to your server via SSH and refresh the repositories and the follow below command for Postgres installation.
 
-```
+```console
 sudo apt-get update
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
 wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-  key add -
@@ -265,7 +265,7 @@ sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
 ```
 
-## Configure Primary Node
+### Configure Primary Node
  
  Next, log in to the primary node (3.131.162.244) as a Postgres user, the default user created with every new PostgreSQL installation.
  
@@ -307,7 +307,7 @@ sudo mkdir /var/lib/postgresql/9.6/archive
 ```
 
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
-Append this line at the end of the configuration file. This allows the replica and replica1(52.15.37.65, 3.17.146.121) to connect with the master node using the replication.
+Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using the replication.
 
 ![image](https://user-images.githubusercontent.com/92078754/215722066-6e575ba8-e8af-49bf-b5f9-cab44d426172.png)
 
@@ -316,7 +316,7 @@ Save the changes and close the file. The restart PostgreSQL service.
 ```console
 sudo systemctl restart postgresql
 ```
-## Configure Replica Node
+### Configure Replica Node
 
 Before the replica node can start replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this, first, stop the PostgreSQL service on the replica node.
 
@@ -354,7 +354,7 @@ Now, start the PostgreSQL server. The replica will now be running in hot standby
 sudo systemctl start postgresql
 ```
 
-## Configure Replica1 Node
+### Configure Replica1 Node
 
 **Note:** In here all steps are same as the Replica setup (Configure Replica Node) for PostgreSQL installation.
 
@@ -369,7 +369,7 @@ sudo systemctl start PostgreSQL
 
 ```
 
-## Test Replication Setup
+### Test Replication Setup
 
 In the **primary node**, created a database with database name psql.
 
