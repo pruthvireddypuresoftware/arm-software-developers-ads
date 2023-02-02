@@ -17,9 +17,9 @@ layout: "learningpathall"
 * [AWS IAM authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
 * [Terraform](https://github.com/zachlas/arm-software-developers-ads/blob/main/content/install-tools/terraform.md)
 
-## Generate Access keys (access key ID and secret access key)
+## Generate Access keys, (access key ID and secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via the AWS CLI.
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
 ### Go to My Security Credentials
 
@@ -37,22 +37,22 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ### Generate the public key and private key
 
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate key-pair, (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
-Generate the key-pair using the following command:
+Generate key-pair using the following command:
 
 ```console
 ssh-keygen -t rsa -b 2048
 ```
 
-By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
+By default, the above command generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
 
 Output when a key pair is generated:
 
 ![image](https://user-images.githubusercontent.com/92078754/215745442-7d9c0295-1cb0-48d1-bc72-4c30cbff276c.png)
 
 
-**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and private key id_rsa to connect to the instance. Add the below code in main.tf file, we do not need to generate public key every time we run terrform apply.
+**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and private key id_rsa with connect to the instance. Add the below code in main.tf file and it is not required to generate a public key each time we run terraform apply.
 
 ```console
 // ssh-key gen
