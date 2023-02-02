@@ -240,15 +240,15 @@ terraform apply
 ```      
 ![terraformaapl](https://user-images.githubusercontent.com/92078754/215390110-2514da83-ac67-4a28-99ed-020d68b6c71c.jpg)
 
-## For configuration of master slave setup followed below steps on all the node
+## For configuration of master-slave setup manually, follow the below steps on all the nodes
 
 Here are the three nodes deployed by Terraform.
 
 **Primary node:** IP: 3.131.162.244
 
-**Replica node:** IP: 52.15.37.65
+**Replica node:** IP: 52.15.37.65 (hot standby server that are read-only)
 
-**Replica1 node:** IP: 3.17.146.121
+**Replica1 node:** IP: 3.17.146.121 (hot standby server that are read-only)
 
 ### Install PostgreSQL Server
 
