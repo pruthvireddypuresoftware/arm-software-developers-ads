@@ -225,7 +225,7 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 terraform apply
 ```      
 ![terraformaapl](https://user-images.githubusercontent.com/92078754/215390110-2514da83-ac67-4a28-99ed-020d68b6c71c.jpg)
-)
+
 
 
 ## Configure PostgreSQL through Ansible
