@@ -204,7 +204,7 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 terraform init
 ```
 
-![Screenshot (320)](https://user-images.githubusercontent.com/92315883/213113408-91133eef-645c-44ed-9136-f48cce40e220.png)
+![image](https://user-images.githubusercontent.com/92078754/216525708-4742761b-1e7f-4a2d-a1da-3dbac9a11d81.png)
 
 #### Create a Terraform execution plan
 
@@ -213,7 +213,7 @@ Run `terraform plan` to create an execution plan.
 ```console
 terraform plan
 ```
-![image](https://user-images.githubusercontent.com/92078754/215394355-e4715e1f-95d9-4446-acdb-ab7116b1f34a.png)
+![image](https://user-images.githubusercontent.com/92078754/216525501-ecfc05b8-dfc3-4aee-a4d5-ea8e6e3773f3.png)
 
 **NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check the created resources.
 
@@ -224,9 +224,7 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![terraformaapl](https://user-images.githubusercontent.com/92078754/215390110-2514da83-ac67-4a28-99ed-020d68b6c71c.jpg)
-
-
+![image](https://user-images.githubusercontent.com/92078754/216525195-41644680-0343-498c-b1cb-769c0b29d200.png)
 
 ## Configure PostgreSQL through Ansible
 Ansible is a software tool that provides simple but powerful automation for cross-platform computer support.
@@ -334,7 +332,11 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. We have used `dump.sql` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
+
+```console
+sudo vi /tmp/dump.sql
+```
 
 ```console
 CREATE TABLE IF NOT EXISTS test (
