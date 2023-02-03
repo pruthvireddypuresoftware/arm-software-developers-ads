@@ -166,7 +166,7 @@ output "Master_public_IP" {
 // Generate inventory file
 resource "local_file" "inventory" {
     depends_on= [aws_instance.PSQL_TEST]
-    filename = "/home/ubuntu/xxx/demo/hosts"
+    filename = "/home/ubuntu/hosts"
     content = <<EOF
           [db_master]
           ${aws_instance.PSQL_TEST.public_ip}         
@@ -222,7 +222,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
 ### Here is the complete YML file of Ansible-Playbook
 ```console
 ---
-- hosts: 18.116.29.252
+- hosts: {{ your_intance_ip }}
   become: yes
   become_method: sudo
 
@@ -320,7 +320,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `[dump.sql]()` file to create a table and insert values into the database.
 
 ```console
 sudo vi /tmp/dump.sql
