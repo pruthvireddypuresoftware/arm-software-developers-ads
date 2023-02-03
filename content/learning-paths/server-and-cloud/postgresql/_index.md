@@ -1,7 +1,7 @@
 ---
 title: Learn how to deploy PostgreSQL on AWS
 
-description: Deploy a single instance of PostgreSQL and a 3-node of PostgreSQL through an EC2 instance
+description: Deploy a single instance of PostgreSQL and 3-node of PostgreSQL through an EC2 instance. Anyone who wants to deploy PostgreSQL on AWS.
 
 minutes_to_complete: 60   
 
