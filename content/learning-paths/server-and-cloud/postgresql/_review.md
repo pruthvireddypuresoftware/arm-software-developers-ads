@@ -13,7 +13,7 @@
 review:
     - questions:
         question: >
-            PostgreSQL offers data types to store IPv4, IPv6, and MAC addresses. ?
+            Does PostgreSQL offers data types to store IPv4, IPv6, and MAC address?
         answers:
             - "True"
             - "False"
@@ -23,7 +23,7 @@ review:
             
     - questions:
         question: >
-            Ansible is a pull-based configuration management tool
+            Ansible is a pull-based configuration management tool.
         answers:
             - "True"
             - "False"
