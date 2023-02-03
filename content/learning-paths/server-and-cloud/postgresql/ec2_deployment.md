@@ -40,20 +40,7 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 Before using Terraform, first generate key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
-Generate key-pair using the following command:
-
-```console
-ssh-keygen -t rsa -b 2048
-```
-
-By default, the above command, generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
-
-Output when a key pair is generated:
-
-![image](https://user-images.githubusercontent.com/92078754/215745442-7d9c0295-1cb0-48d1-bc72-4c30cbff276c.png)
-
-
-**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and the private key id_rsa to connect with the instance. Add the below code in the main.tf file and it is not required to generate a public key each time we run `terraform apply`.
+**Note:** Add the below code in the main.tf file and it is not required to generate a public key each time we run `terraform apply`.
 
 ```console
 // ssh-key gen
