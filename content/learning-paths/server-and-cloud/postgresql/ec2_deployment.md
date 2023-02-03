@@ -320,7 +320,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `[dump.sql]()` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
 
 ```console
 sudo vi /tmp/dump.sql
@@ -361,27 +361,27 @@ ssh ubuntu@18.116.29.252
 ```
 **NOTE:-** Replace `{{ public_ip of an instance where Postgresql deployed }}` which we have created through the `.yml` file.  
 ```console
-sudo su postgres psql
+sudo su postgres -c psql
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215392554-9b99d2bb-8598-4af0-a2c8-47e44fddef95.png)
 
 We can use the below command to show our databases and tables.
 
 ```console
-postgres# \l;
+ \l;
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215725329-e1deae49-f608-4cba-8a5b-8a1acea87103.png)
 
 Use the below command to use existing databases.
 ```console
-postgres=# \c testdb;
+ \c testdb;
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215393022-56f6f41a-a115-41a5-b108-beccc8374fde.png)
 
 Use the below command to show the tables.
 
 ```console
-testdb=# \dt;
+ \dt;
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215393252-9f25a09a-1c9a-4814-93c9-0643e9dcaf68.png)
 
