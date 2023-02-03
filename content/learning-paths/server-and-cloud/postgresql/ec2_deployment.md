@@ -224,7 +224,8 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![image](https://user-images.githubusercontent.com/92078754/216525195-41644680-0343-498c-b1cb-769c0b29d200.png)
+![image](https://user-images.githubusercontent.com/92078754/216535338-db620d14-bd5f-49e2-ab4d-8fb6c411b545.png)
+
 
 ## Configure PostgreSQL through Ansible
 Ansible is a software tool that provides simple but powerful automation for cross-platform computer support.
@@ -234,7 +235,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
 ### Here is the complete YML file of Ansible-Playbook
 ```console
 ---
-- hosts: 3.133.100.152
+- hosts: 18.116.29.252
   become: yes
   become_method: sudo
 
@@ -321,7 +322,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       notify: restart postgres
     - name: Copy database dump file
       copy:
-       src: /home/ubuntu/Axxx/demo/dump.sql
+       src: /tmp/dump.sql
        dest: /tmp
     - name: "Add some dummy data to our database"
       become: true
@@ -356,11 +357,12 @@ ansible-playbook {your_yml_file} -i hosts
 ```
 **NOTE:-** Replace `{{ your_yml_file }}` with your values.
 
-![image](https://user-images.githubusercontent.com/92078754/216302251-0b148a11-ed09-4527-ab68-e1ed3592873a.png)
+![image](https://user-images.githubusercontent.com/92078754/216536075-103a1f9d-94af-49ba-87b6-1e0ebdd6cf06.png)
+
 
 Here is the output after successful execution of the `ansible-playbook` command.
 
-![image](https://user-images.githubusercontent.com/92078754/216256702-5fbab32c-2286-4ffa-9ff3-7d8fc9e54d9f.png)
+![image](https://user-images.githubusercontent.com/92078754/216536372-8ad4b798-b7d9-4274-9e33-0c9d202dd5cb.png)
 
 
 ## Connect to Database using EC2 instance
@@ -368,7 +370,7 @@ Here is the output after successful execution of the `ansible-playbook` command.
 To connect to the database, we need the `public-ip` of the instance where PostgreSQL is deployed. 
 
 ```console
-ssh ubuntu@3.133.100.152
+ssh ubuntu@18.116.29.252
 ```
 **NOTE:-** Replace `{{ public_ip of an instance where Postgresql deployed }}` which we have created through the `.yml` file.  
 ```console
