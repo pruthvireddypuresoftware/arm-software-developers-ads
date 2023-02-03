@@ -39,20 +39,7 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 Before using Terraform, first generate key-pair, (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
-Generate key-pair using the following command:
-
-```console
-ssh-keygen -t rsa -b 2048
-```
-
-By default, the above command generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
-
-Output when a key pair is generated:
-
-![image](https://user-images.githubusercontent.com/92078754/215745442-7d9c0295-1cb0-48d1-bc72-4c30cbff276c.png)
-
-
-**Note:** Use the public key id_rsa.pub inside the Terraform file to provision/start the instance and private key id_rsa with connect to the instance. Add the below code in main.tf file and it is not required to generate a public key each time we run terraform apply.
+**Note:** Add the below code in main.tf file and it is not required to generate (public key, private key) each time we run terraform apply.
 
 ```console
 // ssh-key gen
@@ -238,17 +225,18 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![image](https://user-images.githubusercontent.com/92078754/216297130-7d79fc3a-4768-4f3b-800f-dd592945f587.png)
+
+![image](https://user-images.githubusercontent.com/92078754/216567557-5b7b79ff-5726-4383-9165-91d13a03c961.png)
 
 ## For configuration of master-slave setup manually, follow the below steps on all the nodes
 
 Here are the three nodes deployed by Terraform.
 
-**Primary node:** IP: 18.118.187.246
+**Primary node:** IP: 3.142.184.72
 
-**Replica node:** IP: 3.16.180.53 (hot standby server that are read-only)
+**Replica node:** IP: 18.218.199.25 (hot standby server that are read-only)
 
-**Replica1 node:** IP: 3.129.245.237 (hot standby server that are read-only)
+**Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
 
 ### Install PostgreSQL Server
 
@@ -259,7 +247,7 @@ First log into your server via SSH. Refresh the repositories and the follow belo
 ```console
 sudo apt-get update
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-  key add -
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
@@ -267,7 +255,7 @@ sudo apt-get install postgresql-9.6
 
 ### Configure Primary Node
  
- Next, log into the primary node (3.131.162.244) as a Postgres user, the default user created with every new PostgreSQL installation.
+ Next, log into the primary node (3.142.184.72) as a Postgres user, the default user created with every new PostgreSQL installation.
  
 ```console
 sudo -u postgres psql
@@ -309,7 +297,8 @@ sudo mkdir /var/lib/postgresql/9.6/archive
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
 Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using replication.
 
-![image](https://user-images.githubusercontent.com/92078754/216284502-2fad2d1b-f746-422e-9875-7626439f2720.png)
+![image](https://user-images.githubusercontent.com/92078754/216566702-892e09b8-ba53-4d9e-b8ba-aac5a68adfdc.png)
+
 
 Save the changes and close this file. Then restart PostgreSQL service.
 
@@ -331,7 +320,7 @@ sudo rm -rf /var/lib/postgresql/9.6/main/*
 
 Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node.
 
-![image](https://user-images.githubusercontent.com/92078754/216296228-f63fb816-5b54-43c8-afb3-7abea77ea4f3.png)
+![image](https://user-images.githubusercontent.com/92078754/216566930-8951d122-8a22-4ec1-bdf7-064ffe98a31e.png)
 
 Now we =must modify **sudo vim /etc/postgresql/9.6/main/pg_hba.conf** changed here as hot_standby=off to hot_standby=on.
 
@@ -344,7 +333,7 @@ sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 ```
 ```console
 standby_mode = 'on'
-primary_conninfo = 'host=18.118.187.246 port=5432 user=replication password=password'
+primary_conninfo = 'host=3.142.184.72 port=5432 user=replication password=password'
 trigger_file = '/var/lib/postgresql/9.6/trigger'
 restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
