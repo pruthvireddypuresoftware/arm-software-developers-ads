@@ -352,7 +352,7 @@ To connect to the database, we need the `public-ip` of the instance where Postgr
 ```console
 ssh ubuntu@18.116.29.252
 ```
-**NOTE:-** Replace `{{ public_ip of an instance where Postgresql deployed }}` which we have created through the `.yml` file.  
+**NOTE:-** Replace `{{ public_ip of instance }}` which we have created through the `main.tf` file by using `terraform apply`.  
 ```console
 sudo su postgres -c psql
 ```
