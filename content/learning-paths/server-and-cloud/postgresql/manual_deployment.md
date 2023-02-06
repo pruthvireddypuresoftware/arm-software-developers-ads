@@ -262,6 +262,10 @@ sudo -u postgres psql
 ```
 Therefore, run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
 
+```console
+CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
+```
+
 ![image](https://user-images.githubusercontent.com/92078754/215955679-50b6cb30-1f4e-4ca1-90d3-4758b1a69de7.png)
 
 Then log out from the PostgreSQL prompt.
@@ -269,7 +273,7 @@ Then log out from the PostgreSQL prompt.
 ![image](https://user-images.githubusercontent.com/92078754/215955930-590628a4-463b-4090-b2d2-12defed9aeb0.png)
 
 
-Next, you need to tweak the main configuration file **sudo vi /etc/postgresql/9.6/main/pg_hba.conf**.
+Next, you need to tweak the main configuration file **sudo vim /etc/postgresql/9.6/main/postgresql.conf**.
 With the file open, scroll down and locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
@@ -293,6 +297,10 @@ Next, create an archive directory.
 ```console
 sudo mkdir /var/lib/postgresql/9.6/archive
 ```
+Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
+
+![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
+
 
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
 Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using replication.
@@ -322,7 +330,7 @@ Now run the pg_basebackup utility as shown to copy data from the primary node to
 
 ![image](https://user-images.githubusercontent.com/92078754/216566930-8951d122-8a22-4ec1-bdf7-064ffe98a31e.png)
 
-Now we =must modify **sudo vim /etc/postgresql/9.6/main/pg_hba.conf** changed here as hot_standby=off to hot_standby=on.
+Now we =must modify **sudo vim /etc/postgresql/9.6/main/postgresql.conf** changed here as hot_standby=off to hot_standby=on.
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
@@ -357,7 +365,7 @@ sudo systemctl start postgresql
 sudo systemctl stop PostgreSQL
 sudo rm -rv /var/lib/postgresql/9.6/main/*
 pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U replication 
-sudo vim /etc/postgresql/9.6/main/pg_hba.conf ## hot_standby=on
+sudo vim /etc/postgresql/9.6/main/postgresql.conf ## hot_standby=on
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 sudo systemctl start PostgreSQL
 
