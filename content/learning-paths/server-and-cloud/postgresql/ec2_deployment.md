@@ -253,10 +253,10 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
         name:
          - wget
          - nano
+         - acl
     - name: Install Python pip
       apt: name={{ item }} update_cache=true state=present force_apt_get=yes
       with_items:
-      - python-pip
       - python3-pip
       become: true
     - name: Install Python packages
@@ -264,13 +264,6 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       with_items:
       - psycopg2-binary
       become: true
-    - name: Install required packaged
-      apt:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - acl
-        - python3-pip
   tasks:
     - name: "Find out if PostgreSQL is initialized"
       ansible.builtin.stat:
