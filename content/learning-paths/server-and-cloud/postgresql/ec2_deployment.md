@@ -166,7 +166,7 @@ output "Master_public_IP" {
 // Generate inventory file
 resource "local_file" "inventory" {
     depends_on= [aws_instance.PSQL_TEST]
-    filename = "/home/ubuntu/hosts"
+    filename = "(your_current_directory)/hosts"
     content = <<EOF
           [db_master]
           ${aws_instance.PSQL_TEST.public_ip}         
@@ -176,7 +176,7 @@ resource "local_file" "inventory" {
           EOF
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values. You can check your current directory using `pwd` command.
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
