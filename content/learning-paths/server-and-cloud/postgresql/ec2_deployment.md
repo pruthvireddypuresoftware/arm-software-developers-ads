@@ -308,7 +308,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the vars.yml file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
 
 ```console
 sudo vi /tmp/dump.sql
