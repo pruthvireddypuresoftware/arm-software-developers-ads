@@ -241,6 +241,7 @@ Here are the three nodes deployed by Terraform.
 ### Install PostgreSQL Server
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
+
 **Note:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
 First log into your server via SSH. Follow below command for Postgres installation.
