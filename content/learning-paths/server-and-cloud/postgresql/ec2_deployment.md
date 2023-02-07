@@ -176,7 +176,7 @@ resource "local_file" "inventory" {
           EOF
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values. You can check your current directory using `pwd` command.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
@@ -308,7 +308,7 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generate automatically after the terraform apply command. Create the dummy SQL file `dump.sql` on your Managed Node as below. We have used `dump.sql` file to create a table and insert values into the database.
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generating automatically after the terraform apply command. We have to use `dump.sql` file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
 sudo vi /tmp/dump.sql
@@ -328,7 +328,7 @@ To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
 ```
-**NOTE:-** Replace `{{ your_yml_file }}` with your values.
+**NOTE:-** Replace `{{ your_yml_file }}` with your file name.
 
 ![image](https://user-images.githubusercontent.com/92078754/217154671-d1214d15-0173-4d48-b466-748a5916a57a.png)
 
@@ -352,7 +352,7 @@ sudo su postgres -c psql
 ```
 ![image](https://user-images.githubusercontent.com/92078754/217155170-62aa19cb-82c2-4ee5-a3d7-1b5b2b450373.png)
 
-We can use the below command to show our databases and tables.
+Use the below command to show our databases and tables.
 
 ```console
  \l;
