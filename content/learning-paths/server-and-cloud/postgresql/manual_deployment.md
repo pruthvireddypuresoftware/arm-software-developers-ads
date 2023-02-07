@@ -259,7 +259,7 @@ sudo apt-get install postgresql-9.6
  Next, log into the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
-sudo -u postgres psql
+sudo -u postgres -c psql
 ```
 Run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
 
@@ -284,7 +284,7 @@ Uncomment the line and set it to hot_standby as shown below.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723032-7e1486d7-8ac5-4eee-8be8-206c8a18eb24.png)
 
-Next, locate the max_wal_sender and wal_keep_segments.
+Next, locate the max_wal_sender and wal_keep_segments. These settings control the behavior of the built-in streaming replication feature. These parameters would be set on the primary server that is to send replication data to one or more standby servers.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
@@ -319,7 +319,7 @@ sudo systemctl restart postgresql
 Before the replica node starts replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
 
 ```console
-sudo systemctl stop PostgreSQL 
+sudo systemctl stop postgresql 
 ```
 Next, remove all files in the replica’s data directory in order to start on a clean state and make room for the primary node data directory.
 
@@ -339,24 +339,21 @@ Now we =must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
-Last we need to create a recovery.conf file in the data directory. Else, replication will not happen. Use below command to create the recovery.conf file.
+Last we need to create a recovery.conf file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
 
-```console
-sudo vim /var/lib/postgresql/9.6/main/recovery.conf
-```
+Add the following code in the `recovery.conf` file.
+
 ```console
 standby_mode = 'on'
 primary_conninfo = 'host=3.142.184.72 port=5432 user=replication password=password'
 trigger_file = '/var/lib/postgresql/9.6/trigger'
 restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
+Here, we are telling that when stand_by mode is on then save our connection info with the host address and replication as credentials.
 
 **NOTE:** In primary conf_info, you can replace **host={with your public_ip}**, **user={with your rplication_name}** and **password={with your replication role_password}**.
 
-Here, we are telling that when stand_by mode is on then save our connection info with the host address and replication as credentials.
-
 Now, start the PostgreSQL server. The replica will now be running in hot standby mode.
-
 ```console
 sudo systemctl start postgresql
 ```
@@ -367,12 +364,12 @@ sudo systemctl start postgresql
 
 ```console
 
-sudo systemctl stop PostgreSQL
+sudo systemctl stop postgresql
 sudo rm -rv /var/lib/postgresql/9.6/main/*
 pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U replication 
 sudo vim /etc/postgresql/9.6/main/postgresql.conf ## hot_standby=on
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
-sudo systemctl start PostgreSQL
+sudo systemctl start postgresql
 
 ```
 
