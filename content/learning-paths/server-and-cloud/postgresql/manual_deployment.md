@@ -228,7 +228,7 @@ terraform apply
 
 ![image](https://user-images.githubusercontent.com/92078754/216567557-5b7b79ff-5726-4383-9165-91d13a03c961.png)
 
-## For configuration of master-slave setup manually, follow the below steps on all the nodes
+## Manual configuration of master-slave setup
 
 Here are the three nodes deployed by Terraform.
 
@@ -240,9 +240,10 @@ Here are the three nodes deployed by Terraform.
 
 ### Install PostgreSQL Server
 
-The first step is to install PostgreSQL on the Primary and both the Replica nodes. Note that you need to install the same version of PostgreSQL on all three nodes for logical replication.
+The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
+**Note:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
-First log into your server via SSH. Refresh the repositories and the follow below command for Postgres installation.
+First log into your server via SSH. Follow below command for Postgres installation.
 
 ```console
 sudo apt-get update
@@ -255,12 +256,12 @@ sudo apt-get install postgresql-9.6
 
 ### Configure Primary Node
  
- Next, log into the primary node (3.142.184.72) as a Postgres user, the default user created with every new PostgreSQL installation.
+ Next, log into the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
 sudo -u postgres psql
 ```
-Therefore, run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
+Run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
@@ -273,13 +274,13 @@ Then log out from the PostgreSQL prompt.
 ![image](https://user-images.githubusercontent.com/92078754/215955930-590628a4-463b-4090-b2d2-12defed9aeb0.png)
 
 
-Next, you need to tweak the main configuration file **sudo vim /etc/postgresql/9.6/main/postgresql.conf**.
-With the file open, scroll down and locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
+Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
+With the file open, locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
 Next, locate the wal_level directive. The setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
-Uncomment the line and set it to hot_standby as shown below:
+Uncomment the line and set it to hot_standby as shown below.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723032-7e1486d7-8ac5-4eee-8be8-206c8a18eb24.png)
 
@@ -297,7 +298,7 @@ Next, create an archive directory.
 ```console
 sudo mkdir /var/lib/postgresql/9.6/archive
 ```
-Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
+Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line(IPv6 local connections) at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
 
 ![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
 
@@ -315,7 +316,7 @@ sudo systemctl restart postgresql
 ```
 ### Configure Replica Node
 
-Before the replica node starts replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node.
+Before the replica node starts replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
 
 ```console
 sudo systemctl stop PostgreSQL 
@@ -326,15 +327,19 @@ Next, remove all files in the replica’s data directory in order to start on a 
 sudo rm -rf /var/lib/postgresql/9.6/main/*
 ```
 
-Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node.
+Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node using below command.
+
+```console
+pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U {{ replication_user }}
+```
 
 ![image](https://user-images.githubusercontent.com/92078754/216566930-8951d122-8a22-4ec1-bdf7-064ffe98a31e.png)
 
-Now we =must modify **sudo vim /etc/postgresql/9.6/main/postgresql.conf** changed here as hot_standby=off to hot_standby=on.
+Now we =must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as **hot_standby=off** to **hot_standby=on**.
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
-Last we need to create a recovery.conf file in the data directory. Else, replication will not happen.
+Last we need to create a recovery.conf file in the data directory. Else, replication will not happen. Use below command to create the recovery.conf file.
 
 ```console
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
@@ -346,9 +351,9 @@ trigger_file = '/var/lib/postgresql/9.6/trigger'
 restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
 
-**NOTE:** In primary conf_info, you can replace host={with your public_ip}, user={with your rplication_name} and password={with your replication role_password}.
+**NOTE:** In primary conf_info, you can replace **host={with your public_ip}**, **user={with your rplication_name}** and **password={with your replication role_password}**.
 
-Here, we are telling that stand_by mode is on then save our connection info with the host address and replication as credentials.
+Here, we are telling that when stand_by mode is on then save our connection info with the host address and replication as credentials.
 
 Now, start the PostgreSQL server. The replica will now be running in hot standby mode.
 
@@ -358,7 +363,7 @@ sudo systemctl start postgresql
 
 ### Configure Replica1 Node
 
-**Note:** All steps are same as the Replica setup (Configure Replica Node) for PostgreSQL installation.
+**Note:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
 
 ```console
 
@@ -378,7 +383,7 @@ In **primary node**, create a database with database name psql.
 ![image](https://user-images.githubusercontent.com/92078754/215960314-3c9da65d-7cfd-4006-abcd-694c00e35768.png)
 
 
-In **replica node** the database psql is created in the primary node will replicate on the replica node. And produces below error while writing something here.
+In **replica node** the database **psql** is created in the primary node will replicate on the replica node. And produces below error while writing something here.
 
 ![image](https://user-images.githubusercontent.com/92078754/215960687-57d9efe3-79b2-41d0-81b7-6125f57be74f.png)
 
