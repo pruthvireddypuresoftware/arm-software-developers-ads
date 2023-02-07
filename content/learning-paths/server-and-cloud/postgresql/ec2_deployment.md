@@ -211,7 +211,8 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![image](https://user-images.githubusercontent.com/92078754/216535338-db620d14-bd5f-49e2-ab4d-8fb6c411b545.png)
+![image](https://user-images.githubusercontent.com/92078754/217154441-c292c420-8a51-41da-a9dc-49714704cf1c.png)
+
 
 
 ## Configure PostgreSQL through Ansible
@@ -232,15 +233,15 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
   pre_tasks:
     - name: Update the Machine
       shell: apt-get update -y
-    - name : add lsb_release
+    - name : LSB (Linux Standard Base) and Distribution information
       shell: sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-    - name: fetch & add key
+    - name: Fetch & add key
       shell: wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-    - name: install postgres
+    - name: Install postgres
       shell: sudo apt-get install postgresql -y
-    - name: start postgres server
+    - name: Start postgres server
       shell: sudo systemctl start postgresql
-    - name: check the status
+    - name: Check the status
       shell: sudo systemctl status postgresql
     - name: Update apt repo and cache on all Debian/Ubuntu boxes
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
@@ -248,12 +249,6 @@ To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. 
     - name: Upgrade all apt packages
       apt: upgrade=yes force_apt_get=yes
       become: true
-    - name: Common- Install PostgreSQL packages
-      package:
-        name:
-         - wget
-         - nano
-         - acl
     - name: Install Python pip
       apt: name={{ item }} update_cache=true state=present force_apt_get=yes
       with_items:
@@ -320,10 +315,8 @@ sudo vi /tmp/dump.sql
 ```
 
 ```console
-CREATE TABLE IF NOT EXISTS test (
-  message varchar(255) NOT NULL
-);
-INSERT INTO test(message) VALUES('Ansible is fun');
+CREATE TABLE IF NOT EXISTS test (message varchar(255) NOT NULL);
+INSERT INTO test(message) VALUES('COnfigure postgres by using Ansible');
 ALTER TABLE test OWNER TO "admin";
 CREATE TABLE IF NOT EXISTS teachers (id INT PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, subject VARCHAR, grade_level int);
 INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
@@ -337,12 +330,12 @@ ansible-playbook {your_yml_file} -i hosts
 ```
 **NOTE:-** Replace `{{ your_yml_file }}` with your values.
 
-![image](https://user-images.githubusercontent.com/92078754/216536075-103a1f9d-94af-49ba-87b6-1e0ebdd6cf06.png)
-
+![image](https://user-images.githubusercontent.com/92078754/217154671-d1214d15-0173-4d48-b466-748a5916a57a.png)
 
 Here is the output after successful execution of the `ansible-playbook` command.
 
-![image](https://user-images.githubusercontent.com/92078754/216536372-8ad4b798-b7d9-4274-9e33-0c9d202dd5cb.png)
+![image](https://user-images.githubusercontent.com/92078754/217154765-9901d8ad-05ee-4b2d-8a0b-123c2a2aa738.png)
+
 
 
 ## Connect to Database using EC2 instance
@@ -350,13 +343,14 @@ Here is the output after successful execution of the `ansible-playbook` command.
 To connect to the database, we need the `public-ip` of the instance where PostgreSQL is deployed. 
 
 ```console
-ssh ubuntu@18.116.29.252
+ssh ubuntu@3.21.207.39
 ```
 **NOTE:-** Replace `{{ public_ip of instance }}` which we have created through the `main.tf` file by using `terraform apply`.  
 ```console
+cd ~postgres/
 sudo su postgres -c psql
 ```
-![image](https://user-images.githubusercontent.com/92078754/215392554-9b99d2bb-8598-4af0-a2c8-47e44fddef95.png)
+![image](https://user-images.githubusercontent.com/92078754/217155170-62aa19cb-82c2-4ee5-a3d7-1b5b2b450373.png)
 
 We can use the below command to show our databases and tables.
 
