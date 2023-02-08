@@ -221,8 +221,8 @@ Here are the three nodes deployed by Terraform.
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
 
  **Install PostgreSQL Server**
-
-The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
+   
+ The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
 **Note:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
@@ -249,7 +249,7 @@ With the file open, locate the listen_addresses directive. The directive specifi
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line(IPv6 local connections) at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
+Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
 
 ![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
 
