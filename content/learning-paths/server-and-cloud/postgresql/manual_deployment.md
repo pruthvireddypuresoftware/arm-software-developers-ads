@@ -21,7 +21,7 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
-Go to My **Security Credentials**
+Go to **My Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
 
@@ -33,48 +33,9 @@ Copy the Access Key ID and Secret Access Key
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
-## Generate key-pair(public key, private key) 
+## Deploy EC2 instance via Terraform
 
-Generate the public key and private key
-
-Before using Terraform, first generate key-pair, (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
-
-**Note:** Add the below code in main.tf file and it is not required to generate (public key, private key) each time we run terraform apply.
-
-```console
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
-
-```
-
-
-
-##Deploy EC2 instance via Terraform
-
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` which will do this for us.
-
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` performs the above process.
 
 
 ```console
@@ -109,7 +70,6 @@ provider "aws" {
   access_key  = "AXXXXXXXXXXXXXXXX"
   secret_key   = "AXXXXXXXXXXXXXXXX"
 }
-
 resource "aws_instance" "PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
@@ -151,7 +111,6 @@ resource "aws_default_vpc" "main" {
     Name = "main"
   }
 }
-
 resource "aws_security_group" "Terraformsecurity10" {
   name        = "Terraformsecurity10"
   description = "Allow TLS inbound traffic"
@@ -164,7 +123,6 @@ resource "aws_security_group" "Terraformsecurity10" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
 }
-
   ingress {
     description      = "TLS from VPC"
     from_port        = 22
@@ -172,7 +130,6 @@ resource "aws_security_group" "Terraformsecurity10" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-
   egress {
     from_port        = 0
     to_port          = 0
@@ -183,17 +140,42 @@ resource "aws_security_group" "Terraformsecurity10" {
     Name = "Terraformsecurity10"
   }
  }
-
 output "Master_public_IP" {
   value = [aws_instance.PSQL_TEST.public_ip, aws_instance.replica-PSQL_TEST.public_ip, aws_instance.replica1-PSQL_TEST.public_ip]  
 }
-
-
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
 
-Now, use the below Terraform commands to deploy the `main.tf` file.
+## Generate key-pair, (public key, private key) 
+Below code of the main.tf file is responsible for generating key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+```console
+// ssh-key gen
+resource "tls_private_key" task1_p_key  {
+    algorithm = "RSA"
+}
+resource "aws_key_pair" "task1-key" {
+    key_name    = "task1-key"
+    public_key = tls_private_key.task1_p_key.public_key_openssh
+  }
+resource "local_file" "public_key" {
+    depends_on = [
+      tls_private_key.task1_p_key,
+    ]
+    filename = pathexpand("~/.ssh/id_rsa.pub")
+    content  = tls_private_key.task1_p_key.public_key_openssh
+    file_permission = "400"
+}
+resource "local_file" "private_key" {
+    depends_on = [
+      tls_private_key.task1_p_key,
+    ]
+    filename = pathexpand("~/.ssh/id_rsa")
+    content  = tls_private_key.task1_p_key.private_key_openssh
+    file_permission = "400"
+}
 
+```
+Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ### Terraform Commands
 
@@ -238,7 +220,7 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
 
- Install PostgreSQL Server
+ **Install PostgreSQL Server**
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
@@ -255,7 +237,7 @@ sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
 ```
 
-### Configure Primary Node
+ **Configure Primary Node**
  
  First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
@@ -316,7 +298,7 @@ Save the changes and close this file. Then restart PostgreSQL service.
 ```console
 sudo systemctl restart postgresql
 ```
-### Configure Replica Node
+ **Configure Replica Node**
 
 Before the replica node starts replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
 
@@ -358,8 +340,7 @@ Now, start the PostgreSQL server. The replica will now be running in hot standby
 ```console
 sudo systemctl start postgresql
 ```
-
-### Configure Replica1 Node
+**Configure Replica1 Node**
 
 **Note:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
 
@@ -374,7 +355,7 @@ sudo systemctl start postgresql
 
 ```
 
-### Test Replication Setup
+**Test Replication Setup**
 
 In **primary node**, create a database with database name postgresql.
 
