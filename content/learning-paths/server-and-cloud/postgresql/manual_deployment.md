@@ -73,7 +73,7 @@ provider "aws" {
 resource "aws_instance" "PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity10.name]
+  security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task1-key"
   provisioner "local-exec" {
     command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
@@ -85,7 +85,7 @@ resource "aws_instance" "PSQL_TEST" {
 resource "aws_instance" "replica-PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity10.name]
+  security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task1-key"
   provisioner "local-exec" {
     command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
@@ -97,7 +97,7 @@ resource "aws_instance" "replica-PSQL_TEST" {
 resource "aws_instance" "replica1-PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity10.name]
+  security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task1-key"
   provisioner "local-exec" {
     command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
@@ -111,8 +111,8 @@ resource "aws_default_vpc" "main" {
     Name = "main"
   }
 }
-resource "aws_security_group" "Terraformsecurity10" {
-  name        = "Terraformsecurity10"
+resource "aws_security_group" "Terraformsecurity" {
+  name        = "Terraformsecurity"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_default_vpc.main.id
 
@@ -137,7 +137,7 @@ resource "aws_security_group" "Terraformsecurity10" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "Terraformsecurity10"
+    Name = "Terraformsecurity"
   }
  }
 output "Master_public_IP" {
@@ -220,11 +220,11 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
 
- **Install PostgreSQL Server**
+**Install PostgreSQL Server**
    
- The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
+The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
-**Note:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
+**NOTE:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
 First log into your server via SSH. Follow below command for Postgres installation.
 
@@ -237,9 +237,9 @@ sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
 ```
 
- **Configure Primary Node**
+**Configure Primary Node**
  
- First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
+First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
 sudo -u postgres -c psql
