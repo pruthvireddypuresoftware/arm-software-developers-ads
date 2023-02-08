@@ -291,7 +291,8 @@ Here is the complete YML file of Ansible-Playbook
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generating automatically after the terraform apply command. We have to use `dump.sql` file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generating automatically after the terraform apply command. 
+We have to use `dump.sql` file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
 sudo vi /tmp/dump.sql
@@ -305,8 +306,7 @@ CREATE TABLE IF NOT EXISTS teachers (id INT PRIMARY KEY, first_name VARCHAR, las
 INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
 ```
 
-
- Ansible Commands
+Ansible Commands
 To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
@@ -318,8 +318,6 @@ ansible-playbook {your_yml_file} -i hosts
 Here is the output after successful execution of the `ansible-playbook` command.
 
 ![image](https://user-images.githubusercontent.com/92078754/217154765-9901d8ad-05ee-4b2d-8a0b-123c2a2aa738.png)
-
-
 
 ## Connect to Database using EC2 instance
 
