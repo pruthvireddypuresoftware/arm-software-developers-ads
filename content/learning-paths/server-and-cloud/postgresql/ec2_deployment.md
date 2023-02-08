@@ -136,7 +136,7 @@ resource "local_file" "inventory" {
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
 
-## Generate key-pair, (public key, private key) 
+## Generate key-pair (public key, private key) 
 Below code of the main.tf file is responsible for generating key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 ```console
 // ssh-key gen
