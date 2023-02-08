@@ -22,21 +22,21 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
-### Go to My Security Credentials
+ Go to My **Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
 
-### On Your Security Credentials page, click on create access keys (access key ID and secret access key)
+On Your **Security Credentials** page, click on create **access keys** (access key ID and secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-### Copy the Access Key ID and Secret Access Key 
+Copy the Access Key ID and Secret Access Key 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
-## Generate key-pair, (public key, private key) using ssh keygen
+## Generate key-pair, (public key, private key) 
 
-### Generate the public key and private key
+Generate the public key and private key
 
 Before using Terraform, first generate key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
@@ -183,9 +183,7 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ### Terraform Commands
 
-#### Initialize Terraform
-
-
+Initialize Terraform
 
 ```console
 terraform init
@@ -193,7 +191,7 @@ terraform init
 
 ![image](https://user-images.githubusercontent.com/92078754/216525708-4742761b-1e7f-4a2d-a1da-3dbac9a11d81.png)
 
-#### Create a Terraform execution plan
+Create a Terraform execution plan
 
 Run `terraform plan` to create an execution plan.
 
@@ -204,7 +202,7 @@ terraform plan
 
 **NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check the created resources.
 
-#### Apply a Terraform execution plan
+Apply a Terraform execution plan
 
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. The below command creates all required infrastructure.
 
@@ -220,7 +218,7 @@ Ansible is a software tool that provides simple but powerful automation for cros
 Ansible allows you to configure not just one computer, but potentially a whole network of computers at once.
 To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. The playbook contains a collection of tasks.
 
-### Here is the complete YML file of Ansible-Playbook
+Here is the complete YML file of Ansible-Playbook
 ```console
 ---
 - hosts: {{ your_intance_ip }}
@@ -323,7 +321,7 @@ INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin'
 ```
 
 
-### Ansible Commands
+ Ansible Commands
 To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
