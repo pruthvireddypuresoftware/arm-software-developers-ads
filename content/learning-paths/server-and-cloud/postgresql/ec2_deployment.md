@@ -22,53 +22,17 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
- Go to My **Security Credentials**
+ Go to **My Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
 
-On Your **Security Credentials** page, click on create **access keys** (access key ID and secret access key)
+On Your **Security Credentials** page, click on **create access keys** (access key ID and secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
 Copy the Access Key ID and Secret Access Key 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
-
-## Generate key-pair, (public key, private key) 
-
-Generate the public key and private key
-
-Before using Terraform, first generate key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
-
-**Note:** Add the below code in the main.tf file and it is not required to generate a public key each time we run `terraform apply`.
-
-```console
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
-
-```
 
 ## Deploy EC2 instance via Terraform
 
@@ -103,17 +67,15 @@ resource "local_file" "private_key" {
 }
 
 // instance creation
-
 provider "aws" {
   region = "us-east-2"
   access_key  = "AXXXXXXXXXXXXXXXXXXXX"
   secret_key  = "AXXXXXXXXXXXXXXXXXXXX"
 }
-
 resource "aws_instance" "PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity10.name]
+  security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task1-key"
   provisioner "local-exec" {
     command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
@@ -127,20 +89,18 @@ resource "aws_default_vpc" "main" {
     Name = "main"
   }
 }
-
-resource "aws_security_group" "Terraformsecurity10" {
-  name        = "Terraformsecurity10"
+resource "aws_security_group" "Terraformsecurity" {
+  name        = "Terraformsecurity"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_default_vpc.main.id
 
-  ingress {
+ingress {
     description      = "TLS from VPC"
     from_port        = 5432
     to_port          = 5432
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
 }
- 
  ingress {
     description      = "TLS from VPC"
     from_port        = 22
@@ -148,16 +108,14 @@ resource "aws_security_group" "Terraformsecurity10" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-
 egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }
-
  tags = {
-    Name = "Terraformsecurity10"
+    Name = "Terraformsecurity"
   }
  }
 output "Master_public_IP" {
@@ -178,9 +136,36 @@ resource "local_file" "inventory" {
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
 
+## Generate key-pair, (public key, private key) 
+Below code of the main.tf file is responsible for generating key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+```console
+// ssh-key gen
+resource "tls_private_key" task1_p_key  {
+    algorithm = "RSA"
+}
+resource "aws_key_pair" "task1-key" {
+    key_name    = "task1-key"
+    public_key = tls_private_key.task1_p_key.public_key_openssh
+  }
+resource "local_file" "public_key" {
+    depends_on = [
+      tls_private_key.task1_p_key,
+    ]
+    filename = pathexpand("~/.ssh/id_rsa.pub")
+    content  = tls_private_key.task1_p_key.public_key_openssh
+    file_permission = "400"
+}
+resource "local_file" "private_key" {
+    depends_on = [
+      tls_private_key.task1_p_key,
+    ]
+    filename = pathexpand("~/.ssh/id_rsa")
+    content  = tls_private_key.task1_p_key.private_key_openssh
+    file_permission = "400"
+}
+
+```
 Now, use the below Terraform commands to deploy the `main.tf` file.
-
-
 ### Terraform Commands
 
 Initialize Terraform
