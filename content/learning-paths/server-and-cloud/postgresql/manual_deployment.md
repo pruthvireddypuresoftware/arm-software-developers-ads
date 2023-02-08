@@ -21,21 +21,21 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
-### Go to My Security Credentials
+Go to My **Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
 
-### On Your Security Credentials page click on create access keys, (access key ID and secret access key)
+On Your **Security Credentials** page click on **create access keys**, (access key ID and secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-### Copy the Access Key ID and Secret Access Key 
+Copy the Access Key ID and Secret Access Key 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
-## Generate key-pair(public key, private key) using ssh keygen
+## Generate key-pair(public key, private key) 
 
-### Generate the public key and private key
+Generate the public key and private key
 
 Before using Terraform, first generate key-pair, (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
@@ -71,7 +71,7 @@ resource "local_file" "private_key" {
 
 
 
-## Deploy EC2 instance via Terraform
+##Deploy EC2 instance via Terraform
 
 After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` which will do this for us.
 
@@ -197,7 +197,7 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ### Terraform Commands
 
-#### Initialize Terraform
+Initialize Terraform
 
 Run `terraform init` to initialize the Terraform deployment. This command is responsible for downloading all dependencies which are required for the AWS provider.
 
@@ -207,7 +207,7 @@ terraform init
 
 ![Screenshot (320)](https://user-images.githubusercontent.com/92315883/213113408-91133eef-645c-44ed-9136-f48cce40e220.png)
 
-#### Create a Terraform execution plan
+Create a Terraform execution plan
 
 Run `terraform plan` to create an execution plan.
 
@@ -218,7 +218,7 @@ terraform plan
 
 **NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check created resources.
 
-#### Apply a Terraform execution plan
+Apply a Terraform execution plan
 
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. The below command creates all required infrastructure.
 
@@ -238,7 +238,7 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
 
-### Install PostgreSQL Server
+ Install PostgreSQL Server
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
@@ -257,11 +257,20 @@ sudo apt-get install postgresql-9.6
 
 ### Configure Primary Node
  
- Next, log into the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
+ First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
 sudo -u postgres -c psql
 ```
+Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
+With the file open, locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
+
+![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
+
+Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line(IPv6 local connections) at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
+
+![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
+
 Run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
 
 ```console
@@ -270,15 +279,11 @@ CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
 
 ![image](https://user-images.githubusercontent.com/92078754/215955679-50b6cb30-1f4e-4ca1-90d3-4758b1a69de7.png)
 
-Then log out from the PostgreSQL prompt.
+Then logout from the PostgreSQL prompt.
 
 ![image](https://user-images.githubusercontent.com/92078754/215955930-590628a4-463b-4090-b2d2-12defed9aeb0.png)
 
-
-Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
-With the file open, locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
-
-![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
+Next, need to stop the postgres by this command `sudo systemctl stop postgresql`
 
 Next, locate the wal_level directive. The setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
 Uncomment the line and set it to hot_standby as shown below.
@@ -295,15 +300,11 @@ Next, locate the archive mode By default, it is set to off when set to on, it wi
 
 These changes are required in this configuration file. Save the changes and exit.
 
-Next, create an archive directory.
+Next, create an archive directory and given permission it to by following below commands.
 ```console
 sudo mkdir /var/lib/postgresql/9.6/archive
+sudo chown postgres.postgres /var/lib/postgresql/9.6/archive
 ```
-Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line(IPv6 local connections) at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
-
-![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
-
-
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
 Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using replication.
 
@@ -333,8 +334,7 @@ Now run the pg_basebackup utility as shown to copy data from the primary node to
 ```console
 pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U {{ replication_user }}
 ```
-
-![image](https://user-images.githubusercontent.com/92078754/216566930-8951d122-8a22-4ec1-bdf7-064ffe98a31e.png)
+![image](https://user-images.githubusercontent.com/92078754/217457056-08ace6cf-4608-4d2f-b969-186ace92fd65.png)
 
 Now we =must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as **hot_standby=off** to **hot_standby=on**.
 
@@ -376,19 +376,19 @@ sudo systemctl start postgresql
 
 ### Test Replication Setup
 
-In **primary node**, create a database with database name psql.
+In **primary node**, create a database with database name postgresql.
 
-![image](https://user-images.githubusercontent.com/92078754/215960314-3c9da65d-7cfd-4006-abcd-694c00e35768.png)
+![image](https://user-images.githubusercontent.com/92078754/217457571-e2cfd18c-f27b-4ac8-9c96-dc38d81d5970.png)
 
+In **replica node** the database **postgresql** is created in the primary node will replicate on the replica node. And produces below error while writing something here.
 
-In **replica node** the database **psql** is created in the primary node will replicate on the replica node. And produces below error while writing something here.
-
-![image](https://user-images.githubusercontent.com/92078754/215960687-57d9efe3-79b2-41d0-81b7-6125f57be74f.png)
-
+![image](https://user-images.githubusercontent.com/92078754/217457990-ceedf971-1334-483d-906f-2a005f7e13f3.png)
 
 In **Replica1:** Here, the data from primary node is also replicated. And produces below error while writing something here.
 
-![image](https://user-images.githubusercontent.com/92078754/215962383-b64bcfec-471b-4aeb-9917-a89b7c2eb475.png)
+![image](https://user-images.githubusercontent.com/92078754/217460213-91bf664f-f498-4b8d-b817-b5476954273b.png)
+
+
 
 
 
