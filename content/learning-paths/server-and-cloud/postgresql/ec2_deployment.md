@@ -153,7 +153,7 @@ terraform plan
 ```
 ![image](https://user-images.githubusercontent.com/92078754/216525501-ecfc05b8-dfc3-4aee-a4d5-ea8e6e3773f3.png)
 
-**NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check the created resources.
+**NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check the created resources.
 
 Apply a Terraform execution plan
 
@@ -169,7 +169,7 @@ terraform apply
 ## Configure PostgreSQL through Ansible
 Ansible is a software tool that provides simple but powerful automation for cross-platform computer support.
 Ansible allows you to configure not just one computer, but potentially a whole network of computers at once.
-To run Ansible create a `.yml` file, which is also known as `Ansible-Playbook`. The playbook contains a collection of tasks.
+To run Ansible create a **.yml** file, which is also known as **Ansible-Playbook**. The playbook contains a collection of tasks.
 
 Here is the complete YML file of Ansible-Playbook
 ```console
@@ -262,7 +262,7 @@ Here is the complete YML file of Ansible-Playbook
 **NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. 
 
 In our case, the inventory file is generating automatically after the terraform apply command. 
-We have to use `dump.sql` file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
+We have to use **dump.sql** file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
 sudo vi /tmp/dump.sql
