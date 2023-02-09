@@ -23,61 +23,55 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 Go to **My Security Credentials**
 
-![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
+![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
 On Your **Security Credentials** page click on **create access keys**, (access key ID and secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-Copy the Access Key ID and Secret Access Key 
+Copy the **Access Key ID** and **Secret Access Key** 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
+## Generate key-pair(public key, private key) using ssh keygen
+
+Generate the public key and private key
+
+Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+
+Generate the key-pair using the following command:
+
+```console
+ssh-keygen -t rsa -b 2048
+```
+       
+By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
+
+Output when a key pair is generated:
+
+![image](https://user-images.githubusercontent.com/92078754/217732720-96b77cd2-d434-4f1c-a231-0f1a0d4019a0.png)
+      
+**Note:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
+
 ## Deploy EC2 instance via Terraform
 
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` performs the above process.
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf** performs the above process.
 
 
 ```console
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
-
 // instance creation
+
 provider "aws" {
   region = "us-east-2"
-  access_key  = "AXXXXXXXXXXXXXXXX"
-  secret_key   = "AXXXXXXXXXXXXXXXX"
+  access_key  = "AXXXXXXXXXXXXXXXXXXX"
+  secret_key   = "AXXXXXXXXXXXXXXXXXX"
 }
 resource "aws_instance" "PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task1-key"
-  provisioner "local-exec" {
-    command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
-  }
+  key_name = "task2-key"
+  
   tags = {
     Name = "PSQL_TEST"
   }
@@ -86,22 +80,18 @@ resource "aws_instance" "replica-PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task1-key"
-  provisioner "local-exec" {
-    command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
-  }
+  key_name = "task2-key"
+ 
   tags = {
     Name = "replica-PSQL_TEST"
-  }                              
+  }
 }
 resource "aws_instance" "replica1-PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task1-key"
-  provisioner "local-exec" {
-    command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
-  }
+  key_name = "task2-key"
+  
   tags = {
     Name = "replica1-PSQL_TEST"
   }
@@ -115,11 +105,17 @@ resource "aws_security_group" "Terraformsecurity" {
   name        = "Terraformsecurity"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_default_vpc.main.id
-
   ingress {
     description      = "TLS from VPC"
     from_port        = 5432
     to_port          = 5432
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+}
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 22
+    to_port          = 22
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
 }
@@ -140,41 +136,18 @@ resource "aws_security_group" "Terraformsecurity" {
     Name = "Terraformsecurity"
   }
  }
+ resource "aws_key_pair" "deployer" {
+         key_name   = "task2-key"
+         public_key = "ssh-rsaxxxxxxxxxxxxxx"
+  }
+
 output "Master_public_IP" {
-  value = [aws_instance.PSQL_TEST.public_ip, aws_instance.replica-PSQL_TEST.public_ip, aws_instance.replica1-PSQL_TEST.public_ip]  
+  value = [aws_instance.PSQL_TEST.public_ip, aws_instance.replica-PSQL_TEST.public_ip, aws_instance.replica1-PSQL_TEST.public_ip]
+
 }
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
 
-## Generate key-pair, (public key, private key) 
-Below code of the main.tf file is responsible for generating key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
-```console
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
-
-```
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ### Terraform Commands
@@ -216,18 +189,17 @@ Here are the three nodes deployed by Terraform.
 
 **Primary node:** IP: 3.142.184.72
 
-**Replica node:** IP: 18.218.199.25 (hot standby server that are read-only)
+**Replica node:** IP: 18.218.199.25 (hot standby server that is read-only)
 
-**Replica1 node:** IP: 3.16.21.58 (hot standby server that are read-only)
+**Replica1 node:** IP: 3.16.21.58 (hot standby server that is read-only)
 
-**Install PostgreSQL Server**
-   
+ **Install PostgreSQL Server**
+
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
-**NOTE:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
+**Note:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
 First log into your server via SSH. Follow below command for Postgres installation.
-
 ```console
 sudo apt-get update
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
@@ -238,7 +210,6 @@ sudo apt-get install postgresql-9.6
 ```
 
 **Configure Primary Node**
- 
 First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
@@ -249,7 +220,7 @@ With the file open, locate the listen_addresses directive. The directive specifi
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to pg_hba.conf file in this location (/etc/postgresql/9.6/main/pg_hba.conf) and add the following line at the end `host  all  all 0.0.0.0/0 md5` in IPv4 local connections and `add host all all ::/0 md5` in IPv6 local connections.
+Next, go to pg_hba.conf file in this location **(/etc/postgresql/9.6/main/pg_hba.conf)** and add the following line at the end **host  all  all 0.0.0.0/0 md5** in IPv4 local connections and add **host all all ::/0 md5** in IPv6 local connections.
 
 ![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
 
@@ -258,7 +229,6 @@ Run the following command to create the replication user and assign replication 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
 ```
-
 ![image](https://user-images.githubusercontent.com/92078754/215955679-50b6cb30-1f4e-4ca1-90d3-4758b1a69de7.png)
 
 Then logout from the PostgreSQL prompt.
@@ -276,7 +246,7 @@ Next, locate the max_wal_sender and wal_keep_segments. These settings control th
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
-Next, locate the archive mode by default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
+Next, locate the archive mode By default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
 
 ![image](https://user-images.githubusercontent.com/92078754/217156094-0ef9c7f6-e5b0-4a05-a629-ee53106ae064.png)
 
@@ -291,7 +261,6 @@ Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
 Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using replication.
 
 ![image](https://user-images.githubusercontent.com/92078754/216566702-892e09b8-ba53-4d9e-b8ba-aac5a68adfdc.png)
-
 
 Save the changes and close this file. Then restart PostgreSQL service.
 
@@ -324,7 +293,7 @@ Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as 
 
 Last we need to create a recovery.conf file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
 
-Add the following code in the `recovery.conf` file.
+Add the following code in the **recovery.conf** file.
 
 ```console
 standby_mode = 'on'
@@ -342,17 +311,14 @@ sudo systemctl start postgresql
 ```
 **Configure Replica1 Node**
 
-**Note:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
-
+**NOTE:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
 ```console
-
 sudo systemctl stop postgresql
 sudo rm -rv /var/lib/postgresql/9.6/main/*
 pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U replication 
 sudo vim /etc/postgresql/9.6/main/postgresql.conf ## hot_standby=on
 sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 sudo systemctl start postgresql
-
 ```
 
 **Test Replication Setup**
