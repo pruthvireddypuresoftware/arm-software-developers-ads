@@ -217,13 +217,13 @@ First, login to the primary node (3.142.184.72) via SSH. As a Postgres user, the
 ssh ubuntu@{{ primary_node_ip }}
 ```
 Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
-With the file open, locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
+With the file open, locate the `listen_addresses` directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with ‘*’ in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to pg_hba.conf file in this location **(/etc/postgresql/9.6/main/pg_hba.conf)** and add the following line at the end **host  all  all 0.0.0.0/0 md5** in IPv4 local connections and add **host all all ::/0 md5** in IPv6 local connections.
+Next, go to pg_hba.conf file in this location **(/etc/postgresql/9.6/main/pg_hba.conf)**. To access your instance using SSH change the address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and change the address of IPv6 from `::1/128` to `::/0` to enable all IPv6 address.
 
-![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
+![image](https://user-images.githubusercontent.com/92078754/217788571-697413fe-141a-4266-8800-b6b6c82a7dbd.png) 
 
 Next, log into the Postgres by the following commands.
 ```console
@@ -243,16 +243,16 @@ Then logout from the PostgreSQL prompt.
 
 Next, need to stop the postgres by this command `sudo systemctl stop postgresql`
 
-Next, locate the wal_level directive in the **/etc/postgresql/9.6/main/postgresql.conf file**, the setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
+Next, locate the `wal_level` directive in the **/etc/postgresql/9.6/main/postgresql.conf file**, the setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
 Uncomment the line and set it to hot_standby as shown below.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723032-7e1486d7-8ac5-4eee-8be8-206c8a18eb24.png)
 
-Next, locate the max_wal_sender and wal_keep_segments. These settings control the behavior of the built-in streaming replication feature. These parameters would be set on the primary server that is to send replication data to one or more standby servers.
+Next, locate the `max_wal_sender` and `wal_keep_segments`. These settings control the behavior of the built-in streaming replication feature. These parameters would be set on the primary server that is to send replication data to one or more standby servers.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
-Next, locate the archive mode By default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
+Next, locate the `archive_mode` By default, it is set to off when set to on, it will store the backup of replicas. Also, add `archive_command` while storing the data.
 
 ![image](https://user-images.githubusercontent.com/92078754/217772707-5b8d51fc-ed75-46d3-9593-4b74e72d96e7.png)
 
