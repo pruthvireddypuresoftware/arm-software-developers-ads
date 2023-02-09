@@ -243,7 +243,7 @@ Then logout from the PostgreSQL prompt.
 
 Next, need to stop the postgres by this command `sudo systemctl stop postgresql`
 
-Next, locate the wal_level directive. The setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
+Next, locate the wal_level directive in the **/etc/postgresql/9.6/main/postgresql.conf file**, the setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
 Uncomment the line and set it to hot_standby as shown below.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723032-7e1486d7-8ac5-4eee-8be8-206c8a18eb24.png)
