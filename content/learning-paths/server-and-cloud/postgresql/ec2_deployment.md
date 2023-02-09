@@ -289,12 +289,14 @@ Here is the output after successful execution of the **ansible-playbook** comman
 
 ## Connect to Database using EC2 instance
 
-To connect to the database, we need the **public-ip** of the instance where PostgreSQL is deployed. 
+To connect to the database, we need the `public-ip` of the instance where PostgreSQL is deployed. 
 
 ```console
-ssh ubuntu@3.21.207.39
+ssh ubuntu@{{ public_ip of instance }
 ```
-**NOTE:-** Replace `{{ public_ip of instance }}` which we have created through the **main.tf** file by using `terraform apply`.  
+**NOTE:-** Replace `{{ public_ip of instance }}` with your deployed node ip.  
+
+Next, log into the postgres by using folowing command.
 ```console
 cd ~postgres/
 sudo su postgres -c psql
