@@ -50,7 +50,7 @@ By default, the above command will generate the public as well as private key at
 
 Output when a key pair is generated:
 
-![image](https://user-images.githubusercontent.com/92078754/217732720-96b77cd2-d434-4f1c-a231-0f1a0d4019a0.png)
+![image](https://user-images.githubusercontent.com/92078754/217774946-7bd230c2-3a22-407e-a65b-71a83a14d30f.png)
       
 **NOTE:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
 
