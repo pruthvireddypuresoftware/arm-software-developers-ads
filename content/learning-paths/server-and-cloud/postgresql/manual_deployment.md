@@ -211,10 +211,10 @@ sudo apt-get install postgresql-9.6
 
 **Configure Primary Node**
 
-First, login to the primary node (3.142.184.72) as a Postgres user, the default user is created with every new PostgreSQL installation.
+First, login to the primary node (3.142.184.72) via SSH. As a Postgres user, the default user is created with every new PostgreSQL installation.
  
 ```console
-sudo -u postgres -c psql
+ssh ubuntu@{{ primary_node_ip }}
 ```
 Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
 With the file open, locate the listen_addresses directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with localhost ‘*’ in single quotation marks as shown:
@@ -225,7 +225,12 @@ Next, go to pg_hba.conf file in this location **(/etc/postgresql/9.6/main/pg_hba
 
 ![image](https://user-images.githubusercontent.com/92078754/216910890-c5e510de-e49e-43b6-9b6f-cd2e77aaab41.png)
 
-Run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
+Next, log into the Postgres by the following commands.
+```console
+cd ~postgres/
+sudo su postgres -c psql
+```
+Then run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
@@ -253,7 +258,7 @@ Next, locate the archive mode By default, it is set to off when set to on, it wi
 
 These changes are required in this configuration file. Save the changes and exit.
 
-Next, create an archive directory and given permission it to by following below commands.
+Next, create an archive directory and grant permission to it by following below commands.
 ```console
 sudo mkdir /var/lib/postgresql/9.6/archive
 sudo chown postgres.postgres /var/lib/postgresql/9.6/archive
