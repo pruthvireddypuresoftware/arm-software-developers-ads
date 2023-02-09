@@ -30,13 +30,11 @@ On Your **Security Credentials** page, click on **create access keys** (access k
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-Copy the Access Key ID and Secret Access Key 
+Copy the **Access Key ID** and **Secret Access Key** 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
 ## Generate key-pair(public key, private key) using ssh keygen
-
-Generate the public key and private key
 
 Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
@@ -136,7 +134,7 @@ resource "local_file" "inventory" {
 Now, use the below Terraform commands to deploy the **main.tf** file.
 ### Terraform Commands
 
-Initialize Terraform
+**Initialize Terraform**
 
 ```console
 terraform init
@@ -144,7 +142,7 @@ terraform init
 
 ![image](https://user-images.githubusercontent.com/92078754/216525708-4742761b-1e7f-4a2d-a1da-3dbac9a11d81.png)
 
-Create a Terraform execution plan
+**Create a Terraform execution plan**
 
 Run `terraform plan` to create an execution plan.
 
@@ -155,7 +153,7 @@ terraform plan
 
 **NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check the created resources.
 
-###Apply a Terraform execution plan
+**Apply a Terraform execution plan**
 
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. The below command creates all required infrastructure.
 
