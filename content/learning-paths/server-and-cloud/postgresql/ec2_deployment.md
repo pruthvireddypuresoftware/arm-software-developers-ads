@@ -131,7 +131,7 @@ resource "local_file" "inventory" {
           EOF
 }
 ```
-**NOTE:-** Replace public_key, access_key, secret_key, key_name and filename with your values. You can check your current directory using `pwd` command.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
 
 Now, use the below Terraform commands to deploy the **main.tf** file.
 ### Terraform Commands
@@ -155,7 +155,7 @@ terraform plan
 
 **NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check the created resources.
 
-Apply a Terraform execution plan
+###Apply a Terraform execution plan
 
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. The below command creates all required infrastructure.
 
@@ -259,7 +259,7 @@ Here is the complete YML file of Ansible-Playbook
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. 
+**NOTE:** Replace `db_name` with your database name, `db_user` with your user, and `db_password` with your password or you can add all these variables in the `vars.yml` file. 
 
 In our case, the inventory file is generating automatically after the terraform apply command. 
 We have to use **dump.sql** file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
@@ -277,7 +277,7 @@ INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin'
 ```
 
 Ansible Commands
-To run a Playbook, we need to use the `ansible-playbook` command.
+To run a Playbook, we need to use the **ansible-playbook** command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
 ```
@@ -285,18 +285,18 @@ ansible-playbook {your_yml_file} -i hosts
 
 ![image](https://user-images.githubusercontent.com/92078754/217154671-d1214d15-0173-4d48-b466-748a5916a57a.png)
 
-Here is the output after successful execution of the `ansible-playbook` command.
+Here is the output after successful execution of the **ansible-playbook** command.
 
 ![image](https://user-images.githubusercontent.com/92078754/217154765-9901d8ad-05ee-4b2d-8a0b-123c2a2aa738.png)
 
 ## Connect to Database using EC2 instance
 
-To connect to the database, we need the `public-ip` of the instance where PostgreSQL is deployed. 
+To connect to the database, we need the **public-ip** of the instance where PostgreSQL is deployed. 
 
 ```console
 ssh ubuntu@3.21.207.39
 ```
-**NOTE:-** Replace `{{ public_ip of instance }}` which we have created through the `main.tf` file by using `terraform apply`.  
+**NOTE:-** Replace `{{ public_ip of instance }}` which we have created through the **main.tf** file by using `terraform apply`.  
 ```console
 cd ~postgres/
 sudo su postgres -c psql
