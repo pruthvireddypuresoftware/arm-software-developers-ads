@@ -296,7 +296,7 @@ Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as 
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
-Last we need to create a recovery.conf file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
+Last we need to create a **recovery.conf** file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
 
 Add the following code in the **recovery.conf** file.
 
@@ -308,7 +308,7 @@ restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
 Here, we are telling that when stand_by mode is on then save our connection info with the host address and replication as credentials.
 
-**NOTE:** In primary conf_info, you can replace **host={with your public_ip}**, **user={with your rplication_name}** and **password={with your replication role_password}**.
+**NOTE:** In primary conf_info, you can replace `host={primary_server_ip}`, `user={rplication_name}` and `password={replication_role_password}`.
 
 Now, start the PostgreSQL server. The replica will now be running in hot standby mode.
 ```console
