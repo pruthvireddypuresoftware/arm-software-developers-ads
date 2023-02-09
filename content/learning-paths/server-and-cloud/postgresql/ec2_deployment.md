@@ -259,7 +259,9 @@ Here is the complete YML file of Ansible-Playbook
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. In our case, the inventory file is generating automatically after the terraform apply command. 
+**NOTE:** Replace {{ db_name }} with your database name, {{ db_user }} with your user, and {{ db_password }} with your password or you can add all these variables in the `vars.yml` file. 
+
+In our case, the inventory file is generating automatically after the terraform apply command. 
 We have to use `dump.sql` file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
