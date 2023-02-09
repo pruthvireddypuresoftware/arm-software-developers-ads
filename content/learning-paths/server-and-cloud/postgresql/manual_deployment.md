@@ -51,7 +51,7 @@ Output when a key pair is generated:
 
 ![image](https://user-images.githubusercontent.com/92078754/217732720-96b77cd2-d434-4f1c-a231-0f1a0d4019a0.png)
       
-**Note:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
+**NOTE:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
 
 ## Deploy EC2 instance via Terraform
 
