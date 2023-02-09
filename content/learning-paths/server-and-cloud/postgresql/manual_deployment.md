@@ -8,7 +8,7 @@ weight: 2 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-##  Deploy 3 node of PostgreSQL 
+##  Deploy 3 node of PostgreSQL cluster
 
 ## Prerequisites
 
