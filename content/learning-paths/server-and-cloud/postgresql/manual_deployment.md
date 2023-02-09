@@ -276,7 +276,7 @@ Next, locate the max_wal_sender and wal_keep_segments. These settings control th
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
-Next, locate the archive mode By default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
+Next, locate the archive mode by default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
 
 ![image](https://user-images.githubusercontent.com/92078754/217156094-0ef9c7f6-e5b0-4a05-a629-ee53106ae064.png)
 
@@ -318,7 +318,7 @@ pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U {{ 
 ```
 ![image](https://user-images.githubusercontent.com/92078754/217457056-08ace6cf-4608-4d2f-b969-186ace92fd65.png)
 
-Now we =must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as **hot_standby=off** to **hot_standby=on**.
+Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as **hot_standby=off** to **hot_standby=on**.
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
@@ -365,7 +365,7 @@ In **replica node** the database **postgresql** is created in the primary node w
 
 ![image](https://user-images.githubusercontent.com/92078754/217457990-ceedf971-1334-483d-906f-2a005f7e13f3.png)
 
-In **Replica1:** Here, the data from primary node is also replicated. And produces below error while writing something here.
+**Replica1:** Here, the data from primary node is also replicated. And produces below error while writing something here.
 
 ![image](https://user-images.githubusercontent.com/92078754/217460213-91bf664f-f498-4b8d-b817-b5476954273b.png)
 
