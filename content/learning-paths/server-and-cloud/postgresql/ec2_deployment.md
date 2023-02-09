@@ -22,9 +22,9 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
- Go to **My Security Credentials**
+ Go to **Security Credentials**
 
-![image](https://user-images.githubusercontent.com/87687468/190137370-87b8ca2a-0b38-4732-80fc-3ea70c72e431.png)
+![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
 On Your **Security Credentials** page, click on **create access keys** (access key ID and secret access key)
 
@@ -34,37 +34,32 @@ Copy the Access Key ID and Secret Access Key
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
+## Generate key-pair(public key, private key) using ssh keygen
+
+Generate the public key and private key
+
+Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+
+Generate the key-pair using the following command:
+
+```console
+ssh-keygen -t rsa -b 2048
+```
+       
+By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
+
+Output when a key pair is generated:
+
+![image](https://user-images.githubusercontent.com/92078754/217732720-96b77cd2-d434-4f1c-a231-0f1a0d4019a0.png)
+      
+**NOTE:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
+
 ## Deploy EC2 instance via Terraform
 
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in `~/.ssh`. We will also create a security group that opens inbound ports `22`(ssh) and `5432`(PSQL). Below is a Terraform file called `main.tf` performs the above process.
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf** performs the above process.
 
 
 ```console
-
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
 
 // instance creation
 provider "aws" {
@@ -77,9 +72,7 @@ resource "aws_instance" "PSQL_TEST" {
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task1-key"
-  provisioner "local-exec" {
-    command = "echo ${self.private_ip} >> private_ips.txt && echo ${self.public_ip} >> public_ips.txt && echo ${self.public_dns} >> public_ips.txt"
-  }
+ 
   tags = {
     Name = "PSQL_TEST"
   }
@@ -121,6 +114,10 @@ egress {
 output "Master_public_IP" {
   value = [aws_instance.PSQL_TEST.public_ip]
 }
+ resource "aws_key_pair" "deployer" {
+         key_name   = "task2-key"
+         public_key = "ssh-rsaxxxxxxxxxxxxxx"
+  }
 // Generate inventory file
 resource "local_file" "inventory" {
     depends_on= [aws_instance.PSQL_TEST]
@@ -134,38 +131,9 @@ resource "local_file" "inventory" {
           EOF
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
+**NOTE:-** Replace public_key, access_key, secret_key, key_name and filename with your values. You can check your current directory using `pwd` command.
 
-## Generate key-pair (public key, private key) 
-Below code of the main.tf file is responsible for generating key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
-```console
-// ssh-key gen
-resource "tls_private_key" task1_p_key  {
-    algorithm = "RSA"
-}
-resource "aws_key_pair" "task1-key" {
-    key_name    = "task1-key"
-    public_key = tls_private_key.task1_p_key.public_key_openssh
-  }
-resource "local_file" "public_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa.pub")
-    content  = tls_private_key.task1_p_key.public_key_openssh
-    file_permission = "400"
-}
-resource "local_file" "private_key" {
-    depends_on = [
-      tls_private_key.task1_p_key,
-    ]
-    filename = pathexpand("~/.ssh/id_rsa")
-    content  = tls_private_key.task1_p_key.private_key_openssh
-    file_permission = "400"
-}
-
-```
-Now, use the below Terraform commands to deploy the `main.tf` file.
+Now, use the below Terraform commands to deploy the **main.tf** file.
 ### Terraform Commands
 
 Initialize Terraform
@@ -255,15 +223,15 @@ Here is the complete YML file of Ansible-Playbook
     - name: "Create app database"
       postgresql_db:
         state: present
-        name: "{{ db_name }}"
+        name: {{ db_name }}
       become: yes
       become_user: postgres
 
     - name: "Create db user"
       postgresql_user:
         state: present
-        name: "{{ db_user }}"
-        password: "{{ db_password }}"
+        name: {{ db_user }}
+        password: {{ db_password }}
       become: yes
       become_user: postgres
 
@@ -273,7 +241,7 @@ Here is the complete YML file of Ansible-Playbook
         contype: host
         databases: all
         method: md5
-        users: "{{ db_user }}"
+        users: {{ db_user }}
         create: true
       become: yes
       become_user: postgres
