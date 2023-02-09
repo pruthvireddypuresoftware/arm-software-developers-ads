@@ -254,7 +254,8 @@ Next, locate the max_wal_sender and wal_keep_segments. These settings control th
 
 Next, locate the archive mode By default, it is set to off when set to on, it will store the backup of replicas. Also, add "archive_command" while storing the data.
 
-![image](https://user-images.githubusercontent.com/92078754/217156094-0ef9c7f6-e5b0-4a05-a629-ee53106ae064.png)
+![image](https://user-images.githubusercontent.com/92078754/217772707-5b8d51fc-ed75-46d3-9593-4b74e72d96e7.png)
+
 
 These changes are required in this configuration file. Save the changes and exit.
 
