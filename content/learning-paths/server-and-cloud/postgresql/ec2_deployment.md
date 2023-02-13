@@ -36,9 +36,9 @@ Copy the **Access Key ID** and **Secret Access Key**
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.
 
-Generate the key-pair using the following command:
+Generate the **key-pair** using the following command:
 
 ```console
 ssh-keygen -t rsa -b 2048
