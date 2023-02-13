@@ -172,7 +172,7 @@ To run Ansible create a **.yml** file, which is also known as **Ansible-Playbook
 Here is the complete YML file of Ansible-Playbook
 ```console
 ---
-- hosts: {{ your_intance_ip }}
+- hosts: {{ your_node_ip }}
   become: yes
   become_method: sudo
 
@@ -289,12 +289,12 @@ Here is the output after successful execution of the **ansible-playbook** comman
 
 ## Connect to Database using EC2 instance
 
-To connect to the database, we need the `public-ip` of the instance where PostgreSQL is deployed. 
+To connect to the database, we need the `public-ip` of the node where PostgreSQL is deployed. 
 
 ```console
-ssh ubuntu@{{ public_ip of instance }
+ssh ubuntu@{{ public_ip_of_node }
 ```
-**NOTE:-** Replace `{{ public_ip of instance }}` with your deployed node ip.  
+**NOTE:-** Replace `{{ public_ip_of_node }}` with your deployed node ip.  
 
 Next, log into the postgres by using the below commands.
 ```console
