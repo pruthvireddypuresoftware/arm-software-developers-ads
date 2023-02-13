@@ -274,7 +274,7 @@ sudo systemctl restart postgresql
 ```
  **Configure Replica Node**
 
-Before the replica node starts replicating data from the master node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
+Before the replica node starts replicating data from the primary node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
 
 ```console
 sudo systemctl stop postgresql 
