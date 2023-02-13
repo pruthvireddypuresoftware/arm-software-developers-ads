@@ -197,7 +197,7 @@ The first step is to install PostgreSQL on the Primary and both the Replica node
 
 **NOTE:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
-First log into your server via SSH `ssh ubuntu@{{ your_instance_ip }}`. And then follow below command for Postgres installation.
+First log into your nodes via SSH `ssh ubuntu@{{ your_nodes_ip }}`. And then follow below command for Postgres installation.
 ```console
 sudo apt-get update
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
@@ -209,7 +209,7 @@ sudo apt-get install postgresql-9.6
 
 **Configure Primary Node**
 
-First, login to the primary node (3.142.184.72) via SSH. As a Postgres user, the default user is created with every new PostgreSQL installation.
+SSH to the primary node(3.142.184.72) and follow the steps below to make configuration changes.
  
 ```console
 ssh ubuntu@{{ primary_node_ip }}
