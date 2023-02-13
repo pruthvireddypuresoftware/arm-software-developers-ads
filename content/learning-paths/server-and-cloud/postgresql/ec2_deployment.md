@@ -274,7 +274,8 @@ CREATE TABLE IF NOT EXISTS teachers (id INT PRIMARY KEY, first_name VARCHAR, las
 INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
 ```
 
-Ansible Commands
+#### Ansible Commands
+
 To run a Playbook, we need to use the **ansible-playbook** command.
 ```console
 ansible-playbook {your_yml_file} -i hosts
