@@ -296,7 +296,7 @@ ssh ubuntu@{{ public_ip of instance }
 ```
 **NOTE:-** Replace `{{ public_ip of instance }}` with your deployed node ip.  
 
-Next, log into the postgres by using folowing command.
+Next, log into the postgres by using the below commands.
 ```console
 cd ~postgres/
 sudo su postgres -c psql
