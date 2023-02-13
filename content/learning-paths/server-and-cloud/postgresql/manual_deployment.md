@@ -35,9 +35,9 @@ Copy the **Access Key ID** and **Secret Access Key**
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the **key-pair** (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate the **key-pair** (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.
 
-Generate the key-pair using the following command:
+Generate the **key-pair** using the following command:
 
 ```console
 ssh-keygen -t rsa -b 2048
@@ -150,7 +150,7 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ## Terraform Commands
 
-**Initialize Terraform**
+#### Initialize Terraform
 
 Run `terraform init` to initialize the Terraform deployment. This command is responsible for downloading all dependencies which are required for the AWS provider.
 
@@ -160,7 +160,7 @@ terraform init
 
 ![Screenshot (320)](https://user-images.githubusercontent.com/92315883/213113408-91133eef-645c-44ed-9136-f48cce40e220.png)
 
-**Create a Terraform execution plan**
+#### Create a Terraform execution plan
 
 Run `terraform plan` to create an execution plan.
 
@@ -171,7 +171,7 @@ terraform plan
 
 **NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check created resources.
 
-**Apply a Terraform execution plan**
+#### Apply a Terraform execution plan
 
 Run `terraform apply` to apply the execution plan to your cloud infrastructure. The below command creates all required infrastructure.
 
@@ -207,7 +207,7 @@ sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
 ```
 
-**Configure Primary Node**
+#### Configure Primary Node
 
 SSH to the primary node(3.142.184.72) and follow the steps below to make configuration changes.
  
@@ -272,7 +272,7 @@ Save the changes and close this file. Then restart PostgreSQL service.
 ```console
 sudo systemctl restart postgresql
 ```
- **Configure Replica Node**
+#### Configure Replica Node
 
 Before the replica node starts replicating data from the primary node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this first, stop the PostgreSQL service on the replica node using below command.
 
@@ -314,7 +314,7 @@ Now, start the PostgreSQL server. The replica will now be running in hot standby
 ```console
 sudo systemctl start postgresql
 ```
-**Configure Replica1 Node**
+#### Configure Replica1 Node
 
 **NOTE:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
 ```console
@@ -326,7 +326,7 @@ sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 sudo systemctl start postgresql
 ```
 
-**Test Replication Setup**
+#### Test Replication Setup
 
 In **primary node**, create a database with database name postgresql.
 
