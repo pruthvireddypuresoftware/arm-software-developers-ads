@@ -35,7 +35,7 @@ Copy the **Access Key ID** and **Secret Access Key**
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the key-pair (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate the **key-pair** (public key, private key) using ssh-keygen. Then associate both public and private keys with AWS EC2 instances.
 
 Generate the key-pair using the following command:
 
@@ -148,7 +148,7 @@ output "Master_public_IP" {
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
-### Terraform Commands
+## Terraform Commands
 
 **Initialize Terraform**
 
@@ -215,11 +215,11 @@ SSH to the primary node(3.142.184.72) and follow the steps below to make configu
 ssh ubuntu@{{ primary_node_ip }}
 ```
 Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
-With the file open, locate the `listen_addresses` directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the # symbol then replace localhost with ‘*’ in single quotation marks as shown:
+With the file open, locate the `listen_addresses` directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the `#` symbol then replace localhost with `'*'` in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to pg_hba.conf file in this location **(/etc/postgresql/9.6/main/pg_hba.conf)**. To access your instance using SSH change the address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and change the address of IPv6 from `::1/128` to `::/0` to enable all IPv6 address.
+Next, go to pg_hba.conf file in this location **/etc/postgresql/9.6/main/pg_hba.conf**. To access your instance using SSH change the address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and change the address of IPv6 from `::1/128` to `::/0` to enable all IPv6 address.
 
 ![image](https://user-images.githubusercontent.com/92078754/217788571-697413fe-141a-4266-8800-b6b6c82a7dbd.png) 
 
@@ -263,7 +263,7 @@ sudo mkdir /var/lib/postgresql/9.6/archive
 sudo chown postgres.postgres /var/lib/postgresql/9.6/archive
 ```
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
-Append this line at the end of the configuration file. This allows the replica and replica1({{ replica_ipv4.address }}, {{ replica1_ipv4.address }}) to connect with the master node using replication.
+Append this line at the end of the configuration file. This allows the replica and replica1 **ip-adresses** to connect with the master node using replication.
 
 ![image](https://user-images.githubusercontent.com/92078754/216566702-892e09b8-ba53-4d9e-b8ba-aac5a68adfdc.png)
 
@@ -292,7 +292,7 @@ pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U {{ 
 ```
 ![image](https://user-images.githubusercontent.com/92078754/217457056-08ace6cf-4608-4d2f-b969-186ace92fd65.png)
 
-Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as **hot_standby=off** to **hot_standby=on**.
+Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as `hot_standby=off` to `hot_standby=on`.
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
