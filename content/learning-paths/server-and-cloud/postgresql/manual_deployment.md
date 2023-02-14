@@ -21,7 +21,7 @@ layout: "learningpathall"
 
 The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
-Go to **My Security Credentials**
+Go to **Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
@@ -169,7 +169,7 @@ terraform plan
 ```
 ![image](https://user-images.githubusercontent.com/92078754/215394355-e4715e1f-95d9-4446-acdb-ab7116b1f34a.png)
 
-**NOTE:** The **terraform plan** command is optional. You can directly run **terraform apply** command. But it is always better to check created resources.
+**NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check created resources.
 
 #### Apply a Terraform execution plan
 
@@ -178,7 +178,6 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-
 ![image](https://user-images.githubusercontent.com/92078754/216567557-5b7b79ff-5726-4383-9165-91d13a03c961.png)
 
 ## Manual configuration of master-slave setup
@@ -214,7 +213,7 @@ SSH to the primary node(3.142.184.72) and follow the steps below to make configu
 ```console
 ssh ubuntu@{{ primary_node_ip }}
 ```
-Next, you need to tweak the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
+Next, you need to edit the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
 With the file open, locate the `listen_addresses` directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the `#` symbol then replace localhost with `'*'` in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
@@ -228,7 +227,7 @@ Next, log into the Postgres by the following commands.
 cd ~postgres/
 sudo su postgres -c psql
 ```
-Then run the following command to create the replication user and assign replication privileges. In this command, replication is the replication user while the password is the user’s password.
+Then run the following command to create the replication user and assign replication privileges. In this command, `replication` is the REPLICATION user while `password` is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
@@ -316,7 +315,7 @@ sudo systemctl start postgresql
 ```
 #### Configure Replica1 Node
 
-**NOTE:** All steps are same as the Replica setup **(Configure Replica Node)** for PostgreSQL installation.
+**NOTE:** All steps are same as the Replica setup **(Configure Replica Node)** for Replica1 configuration.
 ```console
 sudo systemctl stop postgresql
 sudo rm -rv /var/lib/postgresql/9.6/main/*
