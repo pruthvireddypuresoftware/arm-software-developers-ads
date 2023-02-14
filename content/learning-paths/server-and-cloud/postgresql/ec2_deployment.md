@@ -260,20 +260,11 @@ Here is the complete YML file of Ansible-Playbook
 **NOTE:** Replace `db_name` with your database name, `db_user` with your user, and `db_password` with your password or you can add all these variables in the `vars.yml` file. 
 
 In our case, the inventory file is generating automatically after the terraform apply command. 
-We have to use **dump.sql** file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
+We have to use [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
 sudo vi /tmp/dump.sql
 ```
-
-```console
-CREATE TABLE IF NOT EXISTS test (message varchar(255) NOT NULL);
-INSERT INTO test(message) VALUES('COnfigure postgres by using Ansible');
-ALTER TABLE test OWNER TO "admin";
-CREATE TABLE IF NOT EXISTS teachers (id INT PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, subject VARCHAR, grade_level int);
-INSERT INTO teachers VALUES (001, 'Rohan', 'Sharma', 'Hindi', 01), (002, 'Nitin', 'malik', 'stat', 02);
-```
-
 #### Ansible Commands
 
 To run a Playbook, we need to use the **ansible-playbook** command.
