@@ -286,7 +286,7 @@ To connect to the database, we need the `host` (public-ip of the node) where Pos
 ```console
 ssh -i ~/.ssh/private_key username@host
 ```
-**NOTE:-** Replace `{private_key}` and `{host}` with your respective values.
+**NOTE:-** Replace `{private_key}`,`{host}` and `username` with your respective values.
 
 ![image](https://user-images.githubusercontent.com/92078754/218686378-904788ec-6fb7-43b8-9c64-b0a245d6c4be.png)
 
