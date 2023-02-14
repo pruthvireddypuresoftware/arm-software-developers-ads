@@ -259,7 +259,7 @@ Here is the complete YML file of Ansible-Playbook
 ```
 **NOTE:** Replace `db_name` with your database name, `db_user` with your user, and `db_password` with your password or you can add all these variables in the `vars.yml` file. 
 
-In our case, the inventory file is generating automatically after the terraform apply command. 
+In our case, the hosts file is generating automatically after the terraform apply command. 
 We have to use [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
@@ -269,60 +269,57 @@ sudo vi /tmp/dump.sql
 
 To run a Playbook, we need to use the **ansible-playbook** command.
 ```console
-ansible-playbook {your_yml_file} -i hosts
+ansible-playbook {your_yml_file} -i {your_hosts_file} --key-file {path_to_private_key}
 ```
-**NOTE:-** Replace `{{ your_yml_file }}` with your file name.
+**NOTE:-** Replace `{{ your_yml_file }}`, `{path_to_private_key}` and `{path_to_private_key}` with your file name.
 
-![image](https://user-images.githubusercontent.com/92078754/217154671-d1214d15-0173-4d48-b466-748a5916a57a.png)
+![image](https://user-images.githubusercontent.com/92078754/218668084-4a8bc7c7-3fa5-46f5-825d-e50242177e56.png)
 
 Here is the output after successful execution of the **ansible-playbook** command.
 
-![image](https://user-images.githubusercontent.com/92078754/217154765-9901d8ad-05ee-4b2d-8a0b-123c2a2aa738.png)
+![image](https://user-images.githubusercontent.com/92078754/218667894-46e16245-8656-46e1-8392-7e43deaeb8db.png)
 
 ## Connect to Database using EC2 instance
 
-To connect to the database, we need the `public-ip` of the node where PostgreSQL is deployed. 
+To connect to the database, we need the `host` (public-ip of the node) where PostgreSQL is deployed. 
 
 ```console
-ssh ubuntu@{{ public_ip_of_node }
+ssh -i ~/.ssh/private_key username@host
 ```
-**NOTE:-** Replace `{{ public_ip_of_node }}` with your deployed node ip.  
+**NOTE:-** Replace `{private_key}` and `{host}` with your respective values. In our case username is ubuntu.
+
+![image](https://user-images.githubusercontent.com/92078754/218686378-904788ec-6fb7-43b8-9c64-b0a245d6c4be.png)
 
 Next, log into the postgres by using the below commands.
 ```console
 cd ~postgres/
 sudo su postgres -c psql
 ```
-![image](https://user-images.githubusercontent.com/92078754/217155170-62aa19cb-82c2-4ee5-a3d7-1b5b2b450373.png)
+![image](https://user-images.githubusercontent.com/92078754/218687608-ad1f1a09-52e3-4bbe-91b0-0dcff9fa59c0.png)
 
 Use the below command to show our databases and tables.
 
 ```console
  \l;
 ```
-![image](https://user-images.githubusercontent.com/92078754/215725329-e1deae49-f608-4cba-8a5b-8a1acea87103.png)
+![image](https://user-images.githubusercontent.com/92078754/218688208-abaa4da6-ef1a-45bd-a00c-e2e1502f80a3.png)
 
 Use the below command to use existing databases.
 ```console
  \c testdb;
 ```
-![image](https://user-images.githubusercontent.com/92078754/215393022-56f6f41a-a115-41a5-b108-beccc8374fde.png)
+![image](https://user-images.githubusercontent.com/92078754/218688529-8bdbb62f-3ac8-49b1-a3d0-7647b2bff50a.png)
 
 Use the below command to show the tables.
 
 ```console
  \dt;
 ```
-![image](https://user-images.githubusercontent.com/92078754/215393252-9f25a09a-1c9a-4814-93c9-0643e9dcaf68.png)
+![image](https://user-images.githubusercontent.com/92078754/218688649-679ace9f-1711-4181-a0b7-aa25e8a9ae8e.png)
 
 Use the below command to access the content of the table.
 
 ```console
 select * from teachers;
 ```
-
-![image](https://user-images.githubusercontent.com/92078754/215393384-763ede3a-1ede-4318-ab1c-f9dce55a4165.png)
-
-
-
-
+![image](https://user-images.githubusercontent.com/92078754/218688811-e9294095-ebe5-4c0f-b74f-770dcee777f5.png)
