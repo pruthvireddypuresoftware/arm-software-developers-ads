@@ -69,7 +69,7 @@ resource "aws_instance" "PSQL_TEST" {
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task1-key"
+  key_name = "task2-key"
  
   tags = {
     Name = "PSQL_TEST"
@@ -221,15 +221,15 @@ Here is the complete YML file of Ansible-Playbook
     - name: "Create app database"
       postgresql_db:
         state: present
-        name: {{ db_name }}
+        name: "{{ db_name }}"
       become: yes
       become_user: postgres
 
     - name: "Create db user"
       postgresql_user:
         state: present
-        name: {{ db_user }}
-        password: {{ db_password }}
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
       become: yes
       become_user: postgres
 
@@ -239,7 +239,7 @@ Here is the complete YML file of Ansible-Playbook
         contype: host
         databases: all
         method: md5
-        users: {{ db_user }}
+        users: "{{ db_user }}"
         create: true
       become: yes
       become_user: postgres
@@ -251,7 +251,7 @@ Here is the complete YML file of Ansible-Playbook
     - name: "Add some dummy data to our database"
       become: true
       become_user: postgres
-      shell: psql {{ db_name }} < /tmp/dump.sql
+      shell: psql "{{ db_name }}" < /tmp/dump.sql
   handlers:
     - name: restart postgres
       service: name=postgresql state=restarted
