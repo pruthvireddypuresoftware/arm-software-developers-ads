@@ -299,7 +299,10 @@ sudo systemctl start postgresql
 
 #### Test Replication Setup
 
-In **primary node**, create a database with database name postgresql.
+In **primary node**, create a database with database name postgresql using below commands.
+```console
+create database postgresql;
+```
 
 ![image](https://user-images.githubusercontent.com/92078754/217457571-e2cfd18c-f27b-4ac8-9c96-dc38d81d5970.png)
 
