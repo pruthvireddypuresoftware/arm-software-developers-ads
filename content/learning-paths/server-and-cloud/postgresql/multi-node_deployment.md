@@ -8,7 +8,7 @@ weight: 2 # 1 is first, 2 is second, etc.
 layout: "learningpathall"
 ---
 
-##  Deploy 3 node of PostgreSQL cluster
+##  Deploy 3-node of PostgreSQL cluster
 
 ## Prerequisites
 
@@ -17,9 +17,9 @@ layout: "learningpathall"
 * [AWS IAM authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
 * [Terraform](https://github.com/zachlas/arm-software-developers-ads/blob/main/content/install-tools/terraform.md)
 
-## Generate Access keys, (access key ID and secret access key)
+## Generate Access keys, (Access key ID and Secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.To generate an access key and secret key, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-access-keys-access-key-id-and-secret-access-key)
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (Access key ID and Secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI. To generate an Access key and Secret key, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-access-keys-access-key-id-and-secret-access-key).
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
@@ -28,7 +28,7 @@ Before using Terraform, first generate the key-pair (public key, private key) us
 
 ## Deploy EC2 instance via Terraform
 
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf** performs the above process.
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf**.
 
 
 ```console
@@ -154,7 +154,7 @@ terraform apply
 ```      
 ![image](https://user-images.githubusercontent.com/92078754/216567557-5b7b79ff-5726-4383-9165-91d13a03c961.png)
 
-## Manual configuration of master-slave setup
+## Manual configuration for master-slave setup
 
 Here are the three nodes deployed by Terraform.
 
@@ -170,7 +170,7 @@ The first step is to install PostgreSQL on the Primary and both the Replica node
 
 **NOTE:** You need to install the same version of PostgreSQL on all three nodes for logical replication.
 
-First log into your nodes via SSH `ssh -i ~/.ssh/private_key username@host`. And then follow below command for Postgres installation.
+First log into your nodes via SSH `ssh -i ~/.ssh/private_key username@host`. Now follow the commands given below for Postgres installation.
 ```console
 sudo apt-get update
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
@@ -187,12 +187,12 @@ SSH to the primary node(3.142.184.72) and follow the steps below to make configu
 ```console
 ssh -i ~/.ssh/private_key ubuntu@{{ primary_node_ip }}
 ```
-Next, you need to edit the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
-With the file open, locate the `listen_addresses` directive. The directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the `#` symbol then replace localhost with `'*'` in single quotation marks as shown:
+Next, edit the main configuration file **/etc/postgresql/9.6/main/postgresql.conf** using your editor.
+With the file open, locate the `listen_addresses` directive. This directive specifies the host under which the PostgreSQL database server listens to connections. Uncomment the directive by removing the `#` symbol then replace localhost with `'*'` in single quotation marks as shown:
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to pg_hba.conf file in this location **/etc/postgresql/9.6/main/pg_hba.conf**. To access your instance using SSH change the address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and change the address of IPv6 from `::1/128` to `::/0` to enable all IPv6 address.
+Next, go to **pg_hba.conf** file in this location **/etc/postgresql/9.6/main/pg_hba.conf**. To access your instance using SSH change the address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and change the address of IPv6 from `::1/128` to `::/0` to enable all IPv6 address.
 
 ![image](https://user-images.githubusercontent.com/92078754/217788571-697413fe-141a-4266-8800-b6b6c82a7dbd.png) 
 
@@ -212,31 +212,31 @@ Then logout from the PostgreSQL prompt.
 
 ![image](https://user-images.githubusercontent.com/92078754/215955930-590628a4-463b-4090-b2d2-12defed9aeb0.png)
 
-Next, need to stop the postgres by this command `sudo systemctl stop postgresql`
+Next, stop the postgres by using `sudo systemctl stop postgresql` command.
 
-Next, locate the `wal_level` directive in the **/etc/postgresql/9.6/main/postgresql.conf file**, the setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
+Next, locate the `wal_level` directive in the **/etc/postgresql/9.6/main/postgresql.conf file**, this setting specifies the amount of information to be written to the Write Ahead Log (WAL) file.
 Uncomment the line and set it to hot_standby as shown below.
 
 ![image](https://user-images.githubusercontent.com/92078754/215723032-7e1486d7-8ac5-4eee-8be8-206c8a18eb24.png)
 
-Next, locate the `max_wal_sender` and `wal_keep_segments`. These settings control the behavior of the built-in streaming replication feature. These parameters would be set on the primary server that is to send replication data to one or more standby servers.
+Next, locate the `max_wal_sender` and `wal_keep_segments`. **max_wal_sender** Specifies the maximum number of concurrent connections from standby servers (i.e., the maximum number of simultaneously running WAL sender processes) and **max_wal_sender** Specifies the minimum number of past log file segments kept in the pg_xlog directory, in case a standby server needs to fetch them for streaming replication. 
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
-Next, locate the `archive_mode` by default, it is set to off when set to on, it will store the backup of replicas. Also, add `archive_command` while storing the data.
+Next, locate the `archive_mode` by default, it is set to off when set to on, it will store the backup of replicas. Also, add `archive_command` while storing the data. The archive command to execute to archive a completed WAL file segment. Any %p in the string is replaced by the path name of the file to archive, and any %f is replaced by only the file name. (The path name is relative to the working directory of the server, i.e., the cluster's data directory).
 
 ![image](https://user-images.githubusercontent.com/92078754/217772707-5b8d51fc-ed75-46d3-9593-4b74e72d96e7.png)
 
 
-These changes are required in this configuration file. Save the changes and exit.
+These changes are required in the configuration file. Save the changes and exit.
 
-Next, create an archive directory and grant permission to it by following below commands.
+Next, create an archive directory and grant permission(The chown command changes the owner of a file) to it by following below commands.
 ```console
 sudo mkdir /var/lib/postgresql/9.6/archive
 sudo chown postgres.postgres /var/lib/postgresql/9.6/archive
 ```
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
-Append this line at the end of the configuration file. This allows the replica and replica1 **ip-adresses** to connect with the master node using replication.
+Append the line at the end of the configuration file as shown in the snippet below. This allows the replica and replica1 **ip-adresses** to connect with the master node using replication.
 
 ![image](https://user-images.githubusercontent.com/92078754/216566702-892e09b8-ba53-4d9e-b8ba-aac5a68adfdc.png)
 
@@ -252,24 +252,24 @@ Before the replica node starts replicating data from the primary node, you need 
 ```console
 sudo systemctl stop postgresql 
 ```
-Next, remove all files in the replica’s data directory in order to start on a clean state and make room for the primary node data directory.
+Next, remove all files in the replica’s data directory in order to start on a clean state and make room for the primary node data directory using below command.
 
 ```console
 sudo rm -rf /var/lib/postgresql/9.6/main/*
 ```
 
-Now run the pg_basebackup utility as shown to copy data from the primary node to the replica node using below command.
+Now run the pg_basebackup utility to copy data from the primary node to the replica node using below command.
 
 ```console
 pg_basebackup -h {{ host_server_ip }} -D /var/lib/postgresql/9.6/main/ -P -U {{ replication_user }}
 ```
 ![image](https://user-images.githubusercontent.com/92078754/217457056-08ace6cf-4608-4d2f-b969-186ace92fd65.png)
 
-Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed here as `hot_standby=off` to `hot_standby=on`.
+Now we must modify **/etc/postgresql/9.6/main/postgresql.conf** changed as `hot_standby=off` to `hot_standby=on`.
 
 ![image](https://user-images.githubusercontent.com/92078754/215724525-3efb4088-2118-4ba9-9138-41b50f076a66.png)
 
-Last we need to create a **recovery.conf** file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
+Lastly we need to create a **recovery.conf** file in the data directory **/var/lib/postgresql/9.6/main/**. Else, replication will not happen.
 
 Add the following code in the **recovery.conf** file.
 
@@ -279,8 +279,6 @@ primary_conninfo = 'host=3.142.184.72 port=5432 user=replication password=passwo
 trigger_file = '/var/lib/postgresql/9.6/trigger'
 restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
-Here, we are telling that when stand_by mode is on then save our connection info with the host address and replication as credentials.
-
 **NOTE:** In primary conf_info, you can replace `host={primary_server_ip}`, `user={rplication_name}` and `password={replication_role_password}`.
 
 Now, start the PostgreSQL server. The replica will now be running in hot standby mode.
@@ -289,7 +287,7 @@ sudo systemctl start postgresql
 ```
 #### Configure Replica1 Node
 
-**NOTE:** All steps are same as the Replica setup **(Configure Replica Node)** for Replica1 configuration.
+**NOTE:** All steps are same as the [Replica setup](/content/learning-paths/server-and-cloud/postgresql/multi-node_deployment.md#configure-replica-node) **(Configure Replica Node)** for Replica1 configuration.
 ```console
 sudo systemctl stop postgresql
 sudo rm -rv /var/lib/postgresql/9.6/main/*
