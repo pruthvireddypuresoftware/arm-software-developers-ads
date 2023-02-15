@@ -26,7 +26,7 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
-On Your **Security Credentials** page, click on **create access keys** (Access key ID and Secret access key)
+On Your **Security Credentials** page, click on **create Access keys** (Access key ID and Secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
