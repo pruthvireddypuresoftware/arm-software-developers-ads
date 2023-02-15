@@ -164,7 +164,7 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that is read-only)
 
- **Install PostgreSQL Server**
+#### Install PostgreSQL Server
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
