@@ -23,7 +23,7 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the **key-pair** (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.TogGenerate the **key-pair**, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
+Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.TogGenerate the key-pair, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
 
 
 ## Deploy EC2 instance via Terraform
@@ -125,7 +125,25 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ## Terraform Commands
 
-To deploy the instances, we need to initialize Terraform, generate an execution plan and apply the execution plan to our cloud infrastructure. Follow this [documentaion](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#terraform-commands) to deploy the main.tf file.
+#### Initialize Terraform
+
+Run `terraform init` to initialize the Terraform deployment. This command is responsible for downloading all dependencies which are required for the AWS provider.
+```console
+terraform init
+```
+
+![image](https://user-images.githubusercontent.com/92078754/216525708-4742761b-1e7f-4a2d-a1da-3dbac9a11d81.png)
+
+#### Create a Terraform execution plan
+
+Run `terraform plan` to create an execution plan.
+
+```console
+terraform plan
+```
+![image](https://user-images.githubusercontent.com/92078754/216525501-ecfc05b8-dfc3-4aee-a4d5-ea8e6e3773f3.png)
+
+**NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check the created resources.
 
 #### Apply a Terraform execution plan
 
