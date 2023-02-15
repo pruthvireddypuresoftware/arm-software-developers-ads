@@ -18,15 +18,15 @@ layout: "learningpathall"
 * [Ansible](https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/)
 * [Terraform](https://github.com/zachlas/arm-software-developers-ads/blob/main/content/install-tools/terraform.md)
 
-## Generate Access keys (access key ID and secret access key)
+## Generate Access keys (Access key ID and Secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (Access key ID and Secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
 
  Go to **Security Credentials**
 
 ![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
-On Your **Security Credentials** page, click on **create access keys** (access key ID and secret access key)
+On Your **Security Credentials** page, click on **create access keys** (Access key ID and Secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
@@ -46,7 +46,7 @@ ssh-keygen -t rsa -b 2048
        
 By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
 
-Output when a key pair is generated:
+Output when a key pair is generated.
 
 ![image](https://user-images.githubusercontent.com/92078754/217774946-7bd230c2-3a22-407e-a65b-71a83a14d30f.png)
       
@@ -54,7 +54,7 @@ Output when a key pair is generated:
 
 ## Deploy EC2 instance via Terraform
 
-After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf** performs the above process.
+After generating the public and private keys, we have to create an EC2 instance. Then we will push our public key to the **authorized_keys** folder in **~/.ssh**. We will also create a security group that opens inbound ports **22**(ssh) and **5432**(PSQL). Below is a Terraform file called **main.tf**.
 
 
 ```console
@@ -131,7 +131,7 @@ resource "local_file" "inventory" {
 ```
 **NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
 
-Now, use the below Terraform commands to deploy the **main.tf** file.
+Now, use the  Terraform commands below to deploy the **main.tf** file.
 ### Terraform Commands
 
 #### Initialize Terraform
