@@ -30,7 +30,7 @@ On Your **Security Credentials** page, click on **create access keys** (Access k
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-Copy the **Access Key ID** and **Secret Access Key** 
+Copy the **Access key ID** and **Secret access Key** 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
