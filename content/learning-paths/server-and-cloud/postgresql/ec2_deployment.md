@@ -139,6 +139,7 @@ Now, use the below Terraform commands to deploy the **main.tf** file.
 ```console
 terraform init
 ```
+Run `terraform init` to initialize the Terraform deployment. This command is responsible for downloading all dependencies which are required for the AWS provider.
 
 ![image](https://user-images.githubusercontent.com/92078754/216525708-4742761b-1e7f-4a2d-a1da-3dbac9a11d81.png)
 
