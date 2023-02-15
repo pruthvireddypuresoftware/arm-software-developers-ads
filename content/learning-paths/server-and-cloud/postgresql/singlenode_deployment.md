@@ -133,7 +133,6 @@ resource "local_file" "inventory" {
 
 Now, use the  Terraform commands below to deploy the **main.tf** file.
 ### Terraform Commands
-
 #### Initialize Terraform
 
 ```console
@@ -262,8 +261,7 @@ Here is the complete YML file of Ansible-Playbook
       service: name=postgresql state=restarted
 
 ```
-**NOTE:** Replace `db_name` with your database name, `db_user` with your user, and `db_password` with your password or you can add all these variables in the [vars.yml](https://github.com/puppetlabs/pdk-docker/files/10739641/vars.txt)
- file. 
+**NOTE:** Replace `db_name` , `db_user` and `db_password` with your database name, user and password respectively or you can add all these variables in the [vars.yml](https://github.com/puppetlabs/pdk-docker/files/10739641/vars.txt) file. 
 
 In our case, the hosts file is generating automatically after the terraform apply command. 
 We have to use [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
@@ -273,7 +271,7 @@ sudo vi /tmp/dump.sql
 ```
 #### Ansible Commands
 
-To run a Playbook, we need to use the **ansible-playbook** command.
+To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i {your_hosts_file} --key-file {path_to_private_key}
 ```
