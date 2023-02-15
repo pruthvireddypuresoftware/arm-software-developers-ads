@@ -276,7 +276,7 @@ To run a Playbook, we need to use the **ansible-playbook** command.
 ```console
 ansible-playbook {your_yml_file} -i {your_hosts_file} --key-file {path_to_private_key}
 ```
-**NOTE:-** Replace `{{ your_yml_file }}`, `{path_to_private_key}` and `{path_to_private_key}` with your file name.
+**NOTE:-** Replace `{{ your_yml_file }}`, `{your_hosts_file}` and `{path_to_private_key}` with your file name.
 
 ![image](https://user-images.githubusercontent.com/92078754/218668084-4a8bc7c7-3fa5-46f5-825d-e50242177e56.png)
 
