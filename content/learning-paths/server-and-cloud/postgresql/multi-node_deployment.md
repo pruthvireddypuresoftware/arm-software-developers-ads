@@ -19,37 +19,12 @@ layout: "learningpathall"
 
 ## Generate Access keys, (access key ID and secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.
-
-Go to **Security Credentials**
-
-![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
-
-On Your **Security Credentials** page click on **create access keys**, (access key ID and secret access key)
-
-![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
-
-Copy the **Access Key ID** and **Secret Access Key** 
-
-![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (access key ID and secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI.To generate an access key and secret key, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-access-keys-access-key-id-and-secret-access-key)
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the **key-pair** (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.
+Before using Terraform, first generate the **key-pair** (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.TogGenerate the **key-pair**, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
 
-Generate the **key-pair** using the following command:
-
-```console
-ssh-keygen -t rsa -b 2048
-```
-       
-By default, the above command will generate the public as well as private key at location **$HOME/.ssh**. You can override the end destination with a custom path.
-
-Output when a key pair is generated:
-
-![image](https://user-images.githubusercontent.com/92078754/217732720-96b77cd2-d434-4f1c-a231-0f1a0d4019a0.png)
-      
-**NOTE:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
 
 ## Deploy EC2 instance via Terraform
 
@@ -150,26 +125,7 @@ Now, use the below Terraform commands to deploy the `main.tf` file.
 
 ## Terraform Commands
 
-#### Initialize Terraform
-
-Run `terraform init` to initialize the Terraform deployment. This command is responsible for downloading all dependencies which are required for the AWS provider.
-
-```console
-terraform init
-```
-
-![Screenshot (320)](https://user-images.githubusercontent.com/92315883/213113408-91133eef-645c-44ed-9136-f48cce40e220.png)
-
-#### Create a Terraform execution plan
-
-Run `terraform plan` to create an execution plan.
-
-```console
-terraform plan
-```
-![image](https://user-images.githubusercontent.com/92078754/215394355-e4715e1f-95d9-4446-acdb-ab7116b1f34a.png)
-
-**NOTE:** The `terraform plan` command is optional. You can directly run `terraform apply` command. But it is always better to check created resources.
+To deploy the instances, we need to initialize Terraform, generate an execution plan and apply the execution plan to our cloud infrastructure. Follow this [documentaion](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#terraform-commands) to deploy the main.tf file.
 
 #### Apply a Terraform execution plan
 
