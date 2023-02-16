@@ -23,7 +23,7 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances.To generate the key-pair, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
+Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances. To generate the key-pair, follow this [documentation](/content/learning-paths/server-and-cloud/postgresql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
 
 
 ## Deploy EC2 instances via Terraform
@@ -201,7 +201,7 @@ Next, log into the PostgreSQL by the following commands.
 cd ~postgres/
 sudo su postgres -c psql
 ```
-Then run the following command to create the replication user and assign replication privileges. In this command, `replication` is the REPLICATION user while `password` is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
+Then run the following command to create the replication user and assign replication privileges. In this command, `replication` is the role name while `password` is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
@@ -223,7 +223,7 @@ Next, locate the `max_wal_sender` and `wal_keep_segments`. **max_wal_sender** Sp
 
 ![image](https://user-images.githubusercontent.com/92078754/215723543-ece14cf8-f235-4a47-8966-0d6cbcb9e7da.png)
 
-Next, locate the `archive_mode` by default, it is set to off when set to on, it will store the backup of replicas. Also, add `archive_command` while storing the data. The archive command to execute to archive a completed WAL file segment. Any `%p` in the string is replaced by the path name of the file to archive, and any `%f` is replaced by only the file name. (The path name is relative to the working directory of the server, i.e., the cluster's data directory).
+Next, locate the `archive_mode` by default, it is set to off when set to on, it will store the backup of replicas. Also, add `archive_command` while storing the data.  Any `%p` in the string is replaced by the path name of the file to archive, and any `%f` is replaced by only the file name. (The path name is relative to the working directory of the server, i.e., the cluster's data directory).
 
 ![image](https://user-images.githubusercontent.com/92078754/217772707-5b8d51fc-ed75-46d3-9593-4b74e72d96e7.png)
 
