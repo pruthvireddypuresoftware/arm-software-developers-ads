@@ -26,11 +26,11 @@ The installation of Terraform on your desktop or laptop needs to communicate wit
 
 ![image](https://user-images.githubusercontent.com/92078754/217739255-cdbc372f-203c-45ee-b280-317eb4685447.png)
 
-On Your **Security Credentials** page, click on **create access keys** (Access key ID and Secret access key)
+On Your **Security Credentials** page, click on **Create access keys** (Access key ID and Secret access key)
 
 ![image](https://user-images.githubusercontent.com/87687468/190137925-c725359a-cdab-468f-8195-8cce9c1be0ae.png)
 
-Copy the **Access key ID** and **Secret access Key** 
+Copy the **Access key ID** and **Secret access key** 
 
 ![image](https://user-images.githubusercontent.com/87687468/190138349-7cc0007c-def1-48b7-ad1e-4ee5b97f4b90.png)
 
@@ -50,7 +50,7 @@ Output when a key pair is generated.
 
 ![image](https://user-images.githubusercontent.com/92078754/217774946-7bd230c2-3a22-407e-a65b-71a83a14d30f.png)
       
-**NOTE:** Use the public key task2-key.pub inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
+**NOTE:** Use the public key **task2-key.pub** inside the Terraform file to provision/start the instance and private key task2-key to connect to the instance.
 
 ## Deploy EC2 instance via Terraform
 
@@ -129,7 +129,7 @@ resource "local_file" "inventory" {
           EOF
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with your values. You can check your current directory using `pwd` command.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, `key_name` and `filename` with respective values. You can check your current directory using `pwd` command.
 
 Now, use the  Terraform commands below to deploy the **main.tf** file.
 ### Terraform Commands
@@ -265,7 +265,7 @@ Here is the complete YML file of Ansible-Playbook
 **NOTE:** Replace `db_name` , `db_user` and `db_password` with your database name, user and password respectively or you can add all these variables in the [vars.yml](https://github.com/puppetlabs/pdk-docker/files/10739641/vars.txt) file. 
 
 In our case, the hosts file is generating automatically after the terraform apply command. 
-We have to use [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
+We are using [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
 sudo vi /tmp/dump.sql
@@ -302,7 +302,7 @@ sudo su postgres -c psql
 ```
 ![image](https://user-images.githubusercontent.com/92078754/218687608-ad1f1a09-52e3-4bbe-91b0-0dcff9fa59c0.png)
 
-Use the below command to show our databases and tables.
+Use the below command to show databases and tables.
 
 ```console
  \l;
