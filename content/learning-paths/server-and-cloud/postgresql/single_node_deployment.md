@@ -264,7 +264,7 @@ Here is the complete YML file of Ansible-Playbook
 ```
 **NOTE:** Replace `db_name` , `db_user` and `db_password` with your database name, user and password respectively or you can add all these variables in the [vars.yml](https://github.com/puppetlabs/pdk-docker/files/10739641/vars.txt) file. 
 
-In our case, the hosts file is generating automatically after the terraform apply command. 
+In our case, the hosts(inventory) file is generating automatically after the terraform apply command. 
 We are using [dump.sql](https://github.com/puppetlabs/pdk-docker/files/10728905/dump.txt) file to create a table and insert values into the database. Create the dummy SQL file on your **Managed Node** as below. 
 
 ```console
