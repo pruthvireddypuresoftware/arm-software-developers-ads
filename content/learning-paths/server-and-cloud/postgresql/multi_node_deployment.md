@@ -305,7 +305,7 @@ create database postgresql;
 
 ![image](https://user-images.githubusercontent.com/92078754/217457571-e2cfd18c-f27b-4ac8-9c96-dc38d81d5970.png)
 
-In **replica node**, the database `postgresql` is created in the primary node will replicate on the replica node. And produces below error while writing something here.
+In **replica node**, the database `postgresql` is created in the primary node will replicate on the replica node and produces below error while writing something here.
 
 ![image](https://user-images.githubusercontent.com/92078754/217457990-ceedf971-1334-483d-906f-2a005f7e13f3.png)
 
