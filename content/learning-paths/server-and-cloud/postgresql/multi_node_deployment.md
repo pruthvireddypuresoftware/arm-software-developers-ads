@@ -164,7 +164,7 @@ Here are the three nodes deployed by Terraform.
 
 **Replica1 node:** IP: 3.16.21.58 (hot standby server that is read-only)
 
-#### Install PostgreSQL Server
+### Install PostgreSQL Server
 
 The first step is to install PostgreSQL on the Primary and both the Replica nodes. 
 
@@ -180,7 +180,7 @@ sudo apt-get upgrade
 sudo apt-get install postgresql-9.6  
 ```
 
-#### Configure Primary Node
+### Configure Primary Node
 
 SSH to the primary node(3.142.184.72) and follow the steps below to make configuration changes.
  
@@ -245,7 +245,7 @@ Save the changes and close this file. Then restart PostgreSQL service.
 ```console
 sudo systemctl restart postgresql
 ```
-#### Configure Replica Node
+### Configure Replica Node
 
 Before the replica node starts replicating data from the primary node, you need to create a copy of the primary node’s data directory to the replica’s data directory. To achieve this, stop the PostgreSQL service on the replica node using below command.
 
@@ -285,7 +285,7 @@ Now, start the PostgreSQL server. The replica will now be running in hot standby
 ```console
 sudo systemctl start postgresql
 ```
-#### Configure Replica1 Node
+### Configure Replica1 Node
 
 **NOTE:** All steps are same as the [Replica setup](/content/learning-paths/server-and-cloud/postgresql/multi-node_deployment.md#configure-replica-node) **(Configure Replica Node)** for Replica1 configuration.
 ```console
@@ -297,7 +297,7 @@ sudo vim /var/lib/postgresql/9.6/main/recovery.conf
 sudo systemctl start postgresql
 ```
 
-#### Test Replication Setup
+### Test Replication Setup
 
 In **primary node**, create a database with database name `postgresql` using below commands.
 ```console
