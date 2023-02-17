@@ -19,11 +19,11 @@ layout: "learningpathall"
 
 ## Generate Access keys (Access key ID and Secret access key)
 
-The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (Access key ID and Secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI. To generate an Access key and Secret key, follow this [documentation](https://github.com/zachlas/arm-software-developers-ads/blob/main/content/learning-paths/server-and-cloud/mysql/ec2_deployment.md#generate-access-keys-access-key-id-and-secret-access-key).
+The installation of Terraform on your desktop or laptop needs to communicate with AWS. Thus, Terraform needs to be able to authenticate with AWS. For authentication, generate access keys (Access key ID and Secret access key). These access keys are used by Terraform for making programmatic calls to AWS via AWS CLI. To generate an Access key and Secret key, follow this [documentation](https://github.com/abhaykumarPS/arm-software-developers-ads/blob/PSQL/content/learning-paths/server-and-cloud/postgresql/single_node_deployment.md#generate-access-keys-access-key-id-and-secret-access-key).
 
 ## Generate key-pair(public key, private key) using ssh keygen
 
-Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances. To generate the key-pair, follow this [documentation](https://github.com/zachlas/arm-software-developers-ads/blob/main/content/learning-paths/server-and-cloud/mysql/ec2_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
+Before using Terraform, first generate the key-pair (public key, private key) using `ssh-keygen`. Then associate both public and private keys with AWS EC2 instances. To generate the key-pair, follow this [documentation](https://github.com/abhaykumarPS/arm-software-developers-ads/blob/PSQL/content/learning-paths/server-and-cloud/postgresql/single_node_deployment.md#generate-key-pairpublic-key-private-key-using-ssh-keygen).
 
 
 ## Deploy EC2 instances via Terraform
