@@ -192,7 +192,8 @@ With the file open, locate the `listen_addresses` directive. This directive spec
 
 ![image](https://user-images.githubusercontent.com/92078754/215722631-7ec6ac62-7726-4fee-821c-ad1149699efd.png)
 
-Next, go to **pg_hba.conf** file in this location **/etc/postgresql/9.6/main/pg_hba.conf**. To access the instance using SSH, we need to change all IPv4 and IPv6 addresses. Change the address of IPv4 from `127.0.0.1/32` (localhost) to `0.0.0.0/0` to enable all IPv4 addresses and the address of IPv6 from `::1/128`(localhost) to `::/0` to enable all IPv6 addresses.
+Next, go to **pg_hba.conf** file in this location **/etc/postgresql/9.6/main/pg_hba.conf**. To access your instance using SSH, we need to enable all IPv4 & IPv6 addresses. To do so, change the IPv4 address from `127.0.0.1/32` (localhost) to `0.0.0.0/0` and IPv6 address from `::1/128` to `::/0`.
+
 ![image](https://user-images.githubusercontent.com/92078754/217788571-697413fe-141a-4266-8800-b6b6c82a7dbd.png) 
 
 Next, log into the PostgreSQL by the following commands.
