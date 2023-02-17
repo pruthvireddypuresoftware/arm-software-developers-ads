@@ -200,7 +200,7 @@ Next, log into the PostgreSQL by the following commands.
 cd ~postgres/
 sudo su postgres -c psql
 ```
-Then run the following command to create the replication user and assign replication privileges. In this command, `replication` is the role name while `password` is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
+Then run the following command to create the replication user and assign replication privileges. In this command, `replication` is the role(user) name while `password` is the user’s password. Be sure to provide a strong password unlike the one we have used which is purely for demo purposes.
 
 ```console
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
