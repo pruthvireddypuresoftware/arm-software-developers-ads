@@ -12,7 +12,7 @@ learning_objectives:
     - Automate PostgreSQL EC2 instance creation using Terraform and Ansible
     - Deploy a 3-node PostgreSQL cluster with two hot standby servers that are read-only
 prerequisites:
-    - An Amazon Web Services (AWS) account
+    - Cloud nodes or physical machines
     - Terraform
     - Ansible
 
