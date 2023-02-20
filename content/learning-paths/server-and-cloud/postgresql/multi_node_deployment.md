@@ -212,7 +212,7 @@ sudo chown postgres.postgres /var/lib/postgresql/9.6/archive
 Next, access the **/etc/postgresql/9.6/main/pg_hba.conf** configuration file.
 Append the line at the end of the configuration file as shown in the snippet below. This allows the replica and replica1 **ip-adresses** to connect with the master node using replication.
 
-![image](https://user-images.githubusercontent.com/92078754/216566702-892e09b8-ba53-4d9e-b8ba-aac5a68adfdc.png)
+![image](https://user-images.githubusercontent.com/92078754/220019422-46ce732e-7104-43a3-9eaf-9f97027efac0.png)
 
 Save the changes and close this file. Then restart PostgreSQL service.
 
