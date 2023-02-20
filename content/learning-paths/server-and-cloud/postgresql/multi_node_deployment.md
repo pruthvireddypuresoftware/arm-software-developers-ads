@@ -36,37 +36,17 @@ After generating the public and private keys, we have to create an EC2 instance.
 
 provider "aws" {
   region = "us-east-2"
-  access_key  = "AXXXXXXXXXXXXXXXXXXX"
-  secret_key   = "AXXXXXXXXXXXXXXXXXX"
+  access_key  = "AXXXXXXXXXXXXXXXXX"
+  secret_key  = "AXXXXXXXXXXXXXXXXX"
 }
 resource "aws_instance" "PSQL_TEST" {
+  count         = "3"
   ami           = "ami-064593a301006939b"
   instance_type = "t4g.small"
   security_groups= [aws_security_group.Terraformsecurity.name]
   key_name = "task2-key"
-  
   tags = {
     Name = "PSQL_TEST"
-  }
-}
-resource "aws_instance" "replica-PSQL_TEST" {
-  ami           = "ami-064593a301006939b"
-  instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task2-key"
- 
-  tags = {
-    Name = "replica-PSQL_TEST"
-  }
-}
-resource "aws_instance" "replica1-PSQL_TEST" {
-  ami           = "ami-064593a301006939b"
-  instance_type = "t4g.small"
-  security_groups= [aws_security_group.Terraformsecurity.name]
-  key_name = "task2-key"
-  
-  tags = {
-    Name = "replica1-PSQL_TEST"
   }
 }
 resource "aws_default_vpc" "main" {
@@ -85,6 +65,7 @@ resource "aws_security_group" "Terraformsecurity" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
 }
+
   ingress {
     description      = "TLS from VPC"
     from_port        = 22
@@ -108,11 +89,11 @@ resource "aws_security_group" "Terraformsecurity" {
   }
 
 output "Master_public_IP" {
-  value = [aws_instance.PSQL_TEST.public_ip, aws_instance.replica-PSQL_TEST.public_ip, aws_instance.replica1-PSQL_TEST.public_ip]
+  value = [aws_instance.PSQL_TEST[0].public_ip, aws_instance.PSQL_TEST[1].public_ip, aws_instance.PSQL_TEST[2].public_ip]
 
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with your values.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with respective values values.
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
@@ -145,17 +126,17 @@ Run `terraform apply` to apply the execution plan to your cloud infrastructure. 
 ```console
 terraform apply
 ```      
-![image](https://user-images.githubusercontent.com/92078754/216567557-5b7b79ff-5726-4383-9165-91d13a03c961.png)
+![image](https://user-images.githubusercontent.com/92078754/220016789-31a86235-19e5-4f3d-959c-003b7a63c8b5.png)
 
 ## Manual configuration for master-slave setup
 
 Here are the three nodes deployed by Terraform.
 
-Primary node: IP: 3.142.184.72
+Primary node: IP: 3.15.154.99
 
-Replica node: IP: 18.218.199.25 (hot standby server that is read-only)
+Replica node: IP: 13.58.196.137 (hot standby server that is read-only)
 
-Replica1 node: IP: 3.16.21.58 (hot standby server that is read-only)
+Replica1 node: IP: 3.145.160.81  (hot standby server that is read-only)
 
 #### Install PostgreSQL Server
 
@@ -175,7 +156,7 @@ sudo apt-get install postgresql-9.6
 
 #### Configure Primary Node
 
-SSH to the primary node(3.142.184.72) and follow the steps below to make configuration changes.
+SSH to the primary node(3.15.154.99) and follow the steps below to make configuration changes.
  
 ```console
 ssh -i ~/.ssh/private_key ubuntu@{{ primary_node_ip }}
@@ -268,7 +249,7 @@ Add the following code in the **recovery.conf** file.
 
 ```console
 standby_mode = 'on'
-primary_conninfo = 'host=3.142.184.72 port=5432 user=replication password=password'
+primary_conninfo = 'host=3.15.154.99 port=5432 user=replication password=password'
 trigger_file = '/var/lib/postgresql/9.6/trigger'
 restore_command = 'cp /var/lib/postgresql/9.6/archive/%f "%p"'
 ```
