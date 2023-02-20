@@ -273,7 +273,7 @@ To run a Playbook, we need to use the `ansible-playbook` command.
 ```console
 ansible-playbook {your_yml_file} -i {your_hosts_file} --key-file {path_to_private_key}
 ```
-**NOTE:-** Replace `{{ your_yml_file }}`, `{your_hosts_file}` and `{path_to_private_key}` with your respective values.
+**NOTE:-** Replace `{{ your_yml_file }}`, `{your_hosts_file}` and `{path_to_private_key}` with respective values.
 
 ![image](https://user-images.githubusercontent.com/92078754/218668084-4a8bc7c7-3fa5-46f5-825d-e50242177e56.png)
 
@@ -288,7 +288,7 @@ To connect to the database, we need the `host` (public-ip of the node) where Pos
 ```console
 ssh -i ~/.ssh/private_key username@host
 ```
-**NOTE:-** Replace `{private_key}`,`{host}` and `username` with your respective values.
+**NOTE:-** Replace `{private_key}`,`{host}` and `username` with respective values.
 
 ![image](https://user-images.githubusercontent.com/92078754/218686378-904788ec-6fb7-43b8-9c64-b0a245d6c4be.png)
 
