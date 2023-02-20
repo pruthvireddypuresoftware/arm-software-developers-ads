@@ -93,7 +93,7 @@ output "Master_public_IP" {
 
 }
 ```
-**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with respective values values.
+**NOTE:-** Replace `public_key`, `access_key`, `secret_key`, and `key_name` with respective values.
 
 Now, use the below Terraform commands to deploy the `main.tf` file.
 
